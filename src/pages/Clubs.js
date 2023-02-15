@@ -5,21 +5,6 @@ import { Link } from "react-router-dom";
 import Layout from "./Layout.js";
 import { fetchAllClubsLogo } from "../API/calls.js";
 
-function ClubListing(props) {
-    return (
-        <a href={props.clubLink}>
-            <div className={'max-w-sm bg-white border border-gray-200 rounded-3xl shadow dark:bg-white dark:border-gray-700 overflow-hidden'}>
-                        <img className={"rounded-t-lg"} src={props.clubImage}/>
-                    <div className={"p-2"}>
-                        <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-900">{props.clubName}</h5>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"><i>{props.clubDescription}</i></p>
-                    </div>
-            </div>
-        </a>
-
-    )
-}
-
 const Clubs = () => {
   const [clubs, setClubs] = useState([]);
 
@@ -39,16 +24,24 @@ const Clubs = () => {
       <h1 className="text-4xl uppercase text-center mt-16">
         Our <span className="font-bold">Clubs</span>
       </h1>
-        <div className={'grid grid-cols-4 gap-10 py-10'}>
-
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-            <ClubListing clubName = "Book Readers Club" clubDescription = "Smells like paper, right outta press" clubImage = "https://images.unsplash.com/photo-1577985051167-0d49eec21977?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2978&q=80" clubLink = "https://www.facebook.com/psgtechbrc" />
-
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-8 mt-8">
+        {clubs.map((club) => (
+          <div className="w-full">
+            <div className="w-full aspect-square border-gray-600 border p-8">
+              <div
+                className="w-full h-full hover:scale-110 transition-all duration-300"
+                style={{
+                  background: `url(${club.image_url})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            </div>
+            <p className="text-lg font-semibold font-sans mt-4">{club.clubName}</p>
+          </div>
+        ))}
+      </div>
     </Layout>
   );
 };
