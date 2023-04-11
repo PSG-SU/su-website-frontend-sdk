@@ -5,16 +5,28 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import Layout from "./Layout";
+import { GALLERY_URL } from "../API/config";
 
 const Gallery = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${GALLERY_URL}`).then((res) => {
+      console.log("Gallery");
+      console.log(res.data.message);
+      setEvents(res.data.message);
+    });
+  }, []);
+
   return (
     <Layout>
       <div className="p-8 w-full">
         <h1 className="text-black tracking-wider text-4xl uppercase mb-4 text-center">
           Our <span className="font-bold">Gallery</span>
         </h1>
-        <GalleryAccordion title="Republic Day 2022" />
-        <GalleryAccordion title="Republic Day 2022" />
+        {events.map((event) => (
+          <GalleryAccordion title={event.event} images = {event.image_url}/>
+        ))}
         <div className="[column-width:33vw] md:[column-width:25vw] lg:[column-width:20vw] [column-gap:1rem] w-full mt-8 pr-8">
           {/* <div className="grid  [grid-template-columns:repeat(auto-fill,250px)] [grid-auto-rows:10px] [justify-content:center]"> */}
         </div>
@@ -23,23 +35,10 @@ const Gallery = () => {
   );
 };
 
-export const GalleryAccordion = ({ title = "" }) => {
-  const [photos, setPhotos] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("https://picsum.photos/v2/list?limit=7", {})
-      .then((res) => {
-        setPhotos(
-          res.data.map((photo) => ({
-            title: photo.author,
-            image_url: photo.download_url,
-            _id: photo.id,
-          }))
-        );
-      })
-      .catch((err) => console.log(err));
-  }, []);
+export const GalleryAccordion = ({ title = "" ,images }) => {
+  const photos = [];
+  photos.push(images);
+  console.log(photos);
 
   const [isHidden, setIsHidden] = useState(false);
 
