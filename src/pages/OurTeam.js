@@ -3,7 +3,7 @@ import axios from "axios";
 import { IoSparklesOutline } from "react-icons/io5";
 import Layout from "./Layout";
 const Person = ({ name, role1 = "", image, role2 = "" }) => {
-  console.log(image);
+  // console.log(image);
   return (
     <div className="flex-auto md:flex flex-col px-8 justify-center items-center text-center">
       {role1.length > 0 && (
@@ -12,15 +12,17 @@ const Person = ({ name, role1 = "", image, role2 = "" }) => {
         </div>
       )}
       <div className={`${role1.length > 0 ? "h-[60%]" : "h-[70%]"}`}>
-        {image && <div
-          className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] border-8 box-border"
-          style={{
-            background: `url(${image})`,
-            backgroundSize: "cover ",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
-          }}
-        ></div>}
+        {image && (
+          <div
+            className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] border-8 box-border"
+            style={{
+              background: `url(${image})`,
+              backgroundSize: "cover ",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          ></div>
+        )}
       </div>
       <div className=" w-full mt-8 font-bold text-lg h-[10%] whitespace-nowrap">
         {name}
@@ -47,6 +49,15 @@ const OurTeam = () => {
   const [SecreScie, setSecreScie] = useState({});
   const [yearButton, setYearButton] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [chief, setChief] = useState({});
+  const [patron, setPatron] = useState({});
+  const [deanStudent, setDeanStudent] = useState({});
+  const [deanFinance, setDeanFinance] = useState({});
+  const [studentCounsel, setStudentCounsel] = useState([]);
+  const [generalCounsel, setGeneralCounsel] = useState([]);
+  const [clubCat1, setClubCat1] = useState([]);
+  const [clubCat2, setClubCat2] = useState([]);
+  const [clubCat3, setClubCat3] = useState([]);
 
   useEffect(() => {
     if (yearButton) {
@@ -87,7 +98,67 @@ const OurTeam = () => {
         }
         // console.log(year_wise);
         setTeam(year_wise);
-        setYearButton(year_wise['2022-2023'])
+        setYearButton(year_wise["2022-2023"]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3002/api/suteam")
+      .then((res) => {
+        // setTeam(res.data);
+        let team = res.data;
+        let stuCoun = [];
+        stuCoun = team.filter(
+          (item) => item.role === "Student Welfare & Councelling"
+        );
+        let genCoun = team.filter(
+          (item) => item.role === "General Functioning"
+        );
+        let clubCat1 = team.filter(
+          (item) =>
+            item.role ===
+            "Tech Music, Dramatics Club, Astronomy Club, Animal Welfare Club, WDC, Martial Arts Club"
+        );
+        let clubCat2 = team.filter(
+          (item) =>
+            item.role ===
+            "CAP & Nature Club, ELS, Entrepreneurs Club, NSS, Tamil Mandram, Fine Arts Club, YRC, Rotaract Club, Radio Hub"
+        );
+        let clubCat3 = team.filter(
+          (item) =>
+            item.role ===
+            "Higher Education Forum, Pathshala Club, GLF, SRC, Industry (Alumni) - Interaction Forum, Book Readers Club"
+        );
+
+        for (let index = 0; index < team.length; index++) {
+          let element = team[index];
+          if (element.role === "Chief Patron") {
+            console.log(element);
+            setChief(element);
+          } else if (element.role === "Patron") {
+            console.log(element);
+            setPatron(element);
+          } else if (element.role === "Dean - Student Affairs") {
+            console.log(element);
+            setDeanStudent(element);
+          } else if (element.role === "Associate Dean - Finance") {
+            console.log(element);
+            setDeanFinance(element);
+          }
+        }
+        
+        console.log(stuCoun);
+        setStudentCounsel(stuCoun);
+        console.log(genCoun);
+        setGeneralCounsel(genCoun);
+        console.log(clubCat1); 
+        setClubCat1(clubCat1);
+        console.log(clubCat2);
+        setClubCat2(clubCat2);
+        console.log(clubCat3);
+        setClubCat3(clubCat3);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -100,27 +171,27 @@ const OurTeam = () => {
         </div>
         <div className="flex-auto lg:flex flex-row mt-4 w-full">
           <Person
-            name="Shri. L. Gopalakrishnan"
-            role1="Chief Patron"
-            image="https://su.psgtech.ac.in/image/team/faculty/trustee.jpg"
-            role2="Managing Trustee , PSG & Sons' Charity"
+            name={chief.name}
+            role1={chief.role}
+            image={chief.image_url}
+            role2={chief.position}
           />
           <Person
-            name="Dr. K. Prakasan"
-            role1="Patron"
-            image="https://su.psgtech.ac.in/image/team/faculty/principle_pr.jpg"
-            role2="Principal"
+            name={patron.name}
+            role1={patron.role}
+            image={patron.image_url}
+            role2={patron.position}
           />
           <Person
-            name="Dr. K. Natarajan"
-            role1="Dean-Student Affairs"
-            image="https://su.psgtech.ac.in/image/team/faculty/natarajan.jpg"
+            name={deanStudent.name}
+            role1={deanStudent.role}
+            image={deanStudent.image_url}
             role2=""
           />
           <Person
-            name="Dr. A. Sankar"
-            role1="Associate Dean-Finance"
-            image="https://su.psgtech.ac.in/image/team/faculty/shankarA.jpg   "
+            name={deanFinance.name}
+            role1={deanFinance.role}
+            image={deanFinance.image_url}
             role2=""
           />
         </div>
@@ -130,18 +201,18 @@ const OurTeam = () => {
               Student Welfare & Counselling
             </div>
             <div className="flex-auto lg:flex flex-row mt-4">
-              <Person
-                name="Dr.D. Karthika Renuka"
-                role1=""
-                image="https://su.psgtech.ac.in/image/team/faculty/karthika.jpg"
-                role2="Associate Dean"
+              {/* <Person
+                name = {studentCounsel[0].name}
+                role1 = {studentCounsel[0].role}
+                image = {studentCounsel[0].image_url}
+                role2 = ""
               />
               <Person
-                name="Mr.P. Dhanabal"
-                role1=""
-                image="https://su.psgtech.ac.in/image/team/faculty/Dhanabal.jpg"
-                role2="Faculty Advisor"
-              />
+                name = {studentCounsel[1].name}
+                role1 = {studentCounsel[1].role}
+                image = {studentCounsel[1].image_url}
+                role2 = ""
+              /> */}
             </div>
           </div>
           <div className="font-bold w-full">
@@ -149,18 +220,18 @@ const OurTeam = () => {
               General Counselling
             </div>
             <div className="flex-auto lg:flex flex-row mt-4">
-              <Person
-                name="Dr. S. Sankarakumar"
-                role1=""
-                image="https://su.psgtech.ac.in/image/team/faculty/shankarkumar.jpg"
-                role2="Faculty Advisor"
+              {/* <Person
+                name = {generalCounsel[0].name}
+                role1 = {generalCounsel[0].role}
+                image = {generalCounsel[0].image_url}
+                role2 = ""
               />
               <Person
-                name="Dr. H. Rammohan"
-                role1=""
-                image="https://su.psgtech.ac.in/image/team/faculty/rammohan.jpg"
-                role2="Faculty Advisor"
-              />
+                name = {generalCounsel[1].name}
+                role1 = {generalCounsel[1].role}
+                image = {generalCounsel[1].image_url}
+                role2 = ""
+              /> */}
             </div>
           </div>
         </div>
@@ -174,18 +245,18 @@ const OurTeam = () => {
             WDC , Martial Arts Club
           </div>
           <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
-            <Person
-              name="Dr. J. Prabhavathi"
-              role1=""
-              role2="Faculty Advisor"
-              image="https://su.psgtech.ac.in/image/team/faculty/prabavathi.jpg"
+            {/* <Person
+              name = {clubCat1[0].name}
+              role2 = {clubCat1[0].role}
+              image = {clubCat1[0].image_url}
+              role1 = ""
             />
             <Person
-              name="Dr. V .Krishnaraj"
-              role1=""
-              role2="Faculty Advisor"
-              image="https://su.psgtech.ac.in/image/team/faculty/IMG_7269.jpg"
-            />
+              name = {clubCat1[1].name}
+              role2 = {clubCat1[1].role}
+              image = {clubCat1[1].image_url}
+              role1 = ""
+            /> */}
           </div>
           <div className="text-center text-2xl mt-8 uppercase tracking-widest">
             Associated Clubs
@@ -195,18 +266,19 @@ const OurTeam = () => {
             Arts Club, YRC, Rotaract Club, Radio Hub
           </div>
           <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 ">
-            <Person
-              name="Dr. P. Visalakshi"
-              role1=""
-              role2="Faculty Advisor"
-              image="https://su.psgtech.ac.in/image/team/faculty/vishalakshi.jpg"
+            {/* <Person
+              name = {clubCat2[0].name}
+              role2 = {clubCat2[0].role}
+              image = {clubCat2[0].image_url}
+              role1 = ""
+
             />
             <Person
-              name="Dr. R. Senthilkumar"
-              role1=""
-              role2="Faculty Advisor"
-              image="https://su.psgtech.ac.in/image/team/faculty/senthilkumarS.jpg"
-            />
+              name = {clubCat2[1].name}
+              role2 = {clubCat2[1].role}
+              image = {clubCat2[1].image_url}
+              role1 = ""
+            /> */}
           </div>
           <div className="text-center text-2xl mt-8 uppercase tracking-widest">
             Associated Clubs
@@ -216,18 +288,18 @@ const OurTeam = () => {
             (Alumni)-Interaction Forum, Book Readers Club
           </div>
           <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
-            <Person
-              name="Mr. D. Muralidhar"
-              role1=""
-              role2="Associate Dean"
-              image="https://su.psgtech.ac.in/image/team/faculty/muralidhar.jpg"
+            {/* <Person
+              name = {clubCat3[0].name}
+              role2 = {clubCat3[0].role}
+              image = {clubCat3[0].image_url}
+              role1 = ""
             />
             <Person
-              name="Mr. T. Venkatachalam"
-              role1=""
-              role2="Faculty Advisor"
-              image="https://su.psgtech.ac.in/image/team/faculty/venkatachalam.jpg"
-            />
+              name = {clubCat3[1].name}
+              role2 = {clubCat3[1].role}
+              image = {clubCat3[1].image_url}
+              role1 = ""
+            /> */}
           </div>
         </div>
         <div className="flex flex-col mt-12">
@@ -237,7 +309,9 @@ const OurTeam = () => {
           <div className="flex-auto lg:flex flex-row items-center gap-x-8 justify-center mt-4 text-center">
             {getYears().map((year) => (
               <button
-                className={`rounded-2xl ${isClicked ? "bg-[#aea8a5]" : "bg-black"} text-white px-4 py-2 mt-2`}
+                className={`rounded-2xl ${
+                  isClicked ? "bg-[#aea8a5]" : "bg-black"
+                } text-white px-4 py-2 mt-2`}
                 onClick={() => {
                   setIsClicked(true);
                   console.log(year);

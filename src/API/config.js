@@ -5,3 +5,5 @@ export const FEED_URL = `${API_URL}/club/proposal/all_published`
 export const GALLERY_URL = `${API_URL}/gallery`
 
 export const ANNOUNCEMENT_URL = `${API_URL}/announcement`
+
+export const SPOTLIGHT_URL = `${API_URL}/spotlight`
