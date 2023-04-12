@@ -5,12 +5,23 @@ import { BiShareAlt } from "react-icons/bi";
 import axios from "axios";
 import { setDashPattern } from "pdf-lib";
 import { FEED_URL, SPOTLIGHT_URL } from "../API/config";
+import { Link } from "react-router-dom";
 
-const Spotlight = ({ title, description }) => {
+const Spotlight = ({ title, description, link }) => {
   return (
-    <div className="text-ellipsis overflow-hidden m-4">
-      <div className="text-gray-600 backdrop">{title}</div>
-      <div className="text-gray-600 mt-2">{description}</div>
+    <div className="text-ellipsis overflow-hidden m-4 border-b-2 pb-4 border-b-slate-600">
+      <div className="flex">
+        <div className="text-gray-600 backdrop font-bold text-lg pl-2 mt-2">{title}</div>
+        {/* <div className="flex-1 w-full"></div> */}
+        <button className="text-gray-600 mt-2 ml-24 bg-gray-300 px-2 rounded-lg">
+          Read More..
+          <Link
+            className="text-gray-600  font-bold text-lg"
+            to={link}
+          />
+        </button>
+      </div>
+      <div className="text-gray-600 mt-4 pl-2">{description}</div>
     </div>
   );
 };
@@ -99,6 +110,7 @@ const SUFeed = () => {
                 <Spotlight
                   title={spotlight.title}
                   description={spotlight.description}
+                  link={spotlight.url}
                 />
               ))}
             </div>
