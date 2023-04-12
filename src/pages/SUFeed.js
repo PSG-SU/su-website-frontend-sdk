@@ -29,15 +29,18 @@ const Spotlight = ({ title, description, link }) => {
 const SUFeed = () => {
   const [event, setEvent] = useState();
   const [spotlight, setSpotlight] = useState([]);
-  const url = FEED_URL;
-  const sendrequest = async () => {
-    const res = await axios.get(`${FEED_URL}`).catch((err) => console.log(err));
-    const data = await res.data;
-    return data;
-  };
 
   useEffect(() => {
-    sendrequest().then((data) => setEvent(data));
+    axios
+      .get(`${FEED_URL}`)
+      .then((res) => {
+        console.log(res.data);
+        setEvent(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
     axios.get(`${SPOTLIGHT_URL}`).then((res) => {
       console.log(res.data);
       setSpotlight(res.data);
