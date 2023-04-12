@@ -6,6 +6,7 @@ import Landing from "./pages/Landing";
 import OurTeam from "./pages/OurTeam";
 import "./styles/tailwind.output.css";
 import SUFeed from "./pages/SUFeed";
+import ByLaw from "./pages/ByLaw";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="club/:id" element={<ClubLanding />} />
         <Route path="feed" element={<SUFeed/>}/>
         <Route path="clubs" element={<Clubs />} />
+        <Route path="by-law" element={<ByLaw />} />
         <Route index element={<Landing />} />
       </Routes>
     </BrowserRouter>

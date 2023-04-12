@@ -7,3 +7,5 @@ export const GALLERY_URL = `${API_URL}/gallery`
 export const ANNOUNCEMENT_URL = `${API_URL}/announcement`
 
 export const SPOTLIGHT_URL = `${API_URL}/spotlight`
+
+export const ABOUT_URL = `${API_URL}/about`
