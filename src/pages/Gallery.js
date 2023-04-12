@@ -25,7 +25,7 @@ const Gallery = () => {
           Our <span className="font-bold">Gallery</span>
         </h1>
         {events.map((event) => (
-          <GalleryAccordion title={event.event} images = {event.image_url}/>
+          <GalleryAccordion title={event.event} images={event.image_url} />
         ))}
         <div className="[column-width:33vw] md:[column-width:25vw] lg:[column-width:20vw] [column-gap:1rem] w-full mt-8 pr-8">
           {/* <div className="grid  [grid-template-columns:repeat(auto-fill,250px)] [grid-auto-rows:10px] [justify-content:center]"> */}
@@ -35,7 +35,7 @@ const Gallery = () => {
   );
 };
 
-export const GalleryAccordion = ({ title = "" ,images }) => {
+export const GalleryAccordion = ({ title = "", images }) => {
   const photos = [];
   photos.push(images);
   console.log(photos);
@@ -58,8 +58,8 @@ export const GalleryAccordion = ({ title = "" ,images }) => {
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-2">
           {photos.map((photo) => (
             <img
-              // loading="lazy"
-              src={photo.image_url}
+              // loading="lazy" 
+              src={images[0].image_url}
               alt={photo.title}
               className="h-36 block"
             />
