@@ -10,7 +10,57 @@ const ContactUs = () => {
       <h1 className="text-white font-sans tracking-wider text-4xl uppercase font-semibold">
         Contact Us
       </h1>
-      <div className="flex space-y-6 flex-col lg:flex-row">
+      <div className="flex gap-y-6 lg:gap-y-0 lg:justify-between lg:pr-20 flex-col lg:flex-row mt-4">
+        <div className="w-1/2">
+          <PSGMap />
+        </div>
+        <div className="flex flex-col gap-y-8">
+          <div className="flex gap-x-8 items-center">
+            <HiOutlineMail className="text-white text-3xl" />
+            <div className="flex flex-col">
+              <h1 className="text-gray-400 font-sans tracking-wider text-lg font-semibold">
+                Email
+              </h1>
+              <a
+                href="mailto:studentsunion@psgtech.ac.in"
+                className="text-white font-sans tracking-wider text-lg font-semibold"
+              >
+                studentsunion@psgtech.ac.in
+              </a>
+            </div>
+          </div>
+
+          <div className="flex gap-x-8 items-center">
+            <BsTelephone className="text-white text-3xl" />
+            <div className="flex flex-col">
+              <h1 className="text-gray-400 font-sans tracking-wider text-lg font-semibold">
+                Phone
+              </h1>
+              <a
+                href="tel:+91 422 257 5000"
+                className="text-white font-sans tracking-wider text-lg font-semibold"
+              >
+                +91 422 257 5000
+              </a>
+            </div>
+          </div>
+
+          <div className="flex gap-x-8 items-center">
+            <IoLocationOutline className="text-white text-3xl" />
+            <div className="flex flex-col">
+              <h1 className="text-gray-400 font-sans tracking-wider text-lg font-semibold">
+                Address
+              </h1>
+              <a
+                href="https://goo.gl/maps/vC8ETQHr43EvvZmz6"
+                className="text-white font-sans tracking-wider text-lg font-semibold"
+              >
+                F Block 2nd Floor, PSG College of Technology, Peelamedu, <br />
+                Coimbatore, Tamil Nadu, 641004
+              </a>
+            </div>
+          </div>
+        </div>
 
       </div>
     </footer>

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { TbExternalLink } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import Layout from "./Layout.js";
-import { fetchClubDescription } from "../API/calls.js";
+import { fetchAllClubsLogo, fetchClubDescription } from "../API/calls.js";
 //? import PersonList from "./ClubDescription.js";
 
 function ClubListing(props) {
   return (
     <a href={props.clubLink}>
-      <div className={'max-w-sm bg-white border-2 border-black rounded-3xl overflow-hidden'}>
+      <div className={'max-w-sm h-[32rem] bg-white border-2 border-black rounded-3xl overflow-hidden'}>
         <img className={"rounded-t-lg hover:scale-110 ease-in-out duration-300"} src={props.clubImage} alt="club-logo" />
         <div className={"p-5"}>
           <h5 className="mb-2 text-4xl font-bold tracking-tight text-gray-900">{props.clubName}</h5>
@@ -25,8 +25,9 @@ const Clubs = () => {
   const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
-    fetchClubDescription()
+    fetchAllClubsLogo()
       .then((res) => {
+        console.log(res.data.filter(i => i.category === "Clubs").sort((a, b) => a.clubName.localeCompare(b.clubName)));
         setClubs(res.data.filter(i => i.category === "Clubs").sort((a, b) => a.clubName.localeCompare(b.clubName)));
       })
       .catch((err) => {
@@ -55,7 +56,7 @@ const Clubs = () => {
             return <ClubListing
               clubName={club.clubName}
               clubTagLine={club.clubTagLine ? club.clubTagLine : "Smells like paper, right outta press"}
-              clubImage={club.clubImage ? club.clubImage : "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Mercado_de_Col%C3%B3n%2C_Valencia%2C_Espa%C3%B1a%2C_2014-06-29%2C_DD_07.JPG/750px-Mercado_de_Col%C3%B3n%2C_Valencia%2C_Espa%C3%B1a%2C_2014-06-29%2C_DD_07.JPG"}
+              clubImage={club.image_url ? club.image_url : "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Mercado_de_Col%C3%B3n%2C_Valencia%2C_Espa%C3%B1a%2C_2014-06-29%2C_DD_07.JPG/750px-Mercado_de_Col%C3%B3n%2C_Valencia%2C_Espa%C3%B1a%2C_2014-06-29%2C_DD_07.JPG"}
               clubLink={`/club/${club.clubId}`}
             />
           })
