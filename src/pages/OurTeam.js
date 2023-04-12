@@ -148,12 +148,12 @@ const OurTeam = () => {
             setDeanFinance(element);
           }
         }
-        
+
         console.log(stuCoun);
         setStudentCounsel(stuCoun);
         console.log(genCoun);
         setGeneralCounsel(genCoun);
-        console.log(clubCat1); 
+        console.log(clubCat1);
         setClubCat1(clubCat1);
         console.log(clubCat2);
         setClubCat2(clubCat2);
@@ -200,39 +200,43 @@ const OurTeam = () => {
             <div className="font-bold text-2xl text-center">
               Student Welfare & Counselling
             </div>
-            <div className="flex-auto lg:flex flex-row mt-4">
-              {/* <Person
-                name = {studentCounsel[0].name}
-                role1 = {studentCounsel[0].role}
-                image = {studentCounsel[0].image_url}
-                role2 = ""
-              />
-              <Person
-                name = {studentCounsel[1].name}
-                role1 = {studentCounsel[1].role}
-                image = {studentCounsel[1].image_url}
-                role2 = ""
-              /> */}
-            </div>
+            {studentCounsel.length > 0 && (
+              <div className="flex-auto lg:flex flex-row mt-4">
+                <Person
+                  name={studentCounsel[0].name}
+                  role1={studentCounsel[0].role}
+                  image={studentCounsel[0].image_url}
+                  role2=""
+                />
+                <Person
+                  name={studentCounsel[1].name}
+                  role1={studentCounsel[1].role}
+                  image={studentCounsel[1].image_url}
+                  role2=""
+                />
+              </div>
+            )}
           </div>
           <div className="font-bold w-full">
             <div className="font-bold text-2xl text-center">
               General Counselling
             </div>
-            <div className="flex-auto lg:flex flex-row mt-4">
-              {/* <Person
-                name = {generalCounsel[0].name}
-                role1 = {generalCounsel[0].role}
-                image = {generalCounsel[0].image_url}
-                role2 = ""
-              />
-              <Person
-                name = {generalCounsel[1].name}
-                role1 = {generalCounsel[1].role}
-                image = {generalCounsel[1].image_url}
-                role2 = ""
-              /> */}
-            </div>
+            {generalCounsel.length > 0 && (
+              <div className="flex-auto lg:flex flex-row mt-4">
+                <Person
+                  name={generalCounsel[0].name}
+                  role1={generalCounsel[0].role}
+                  image={generalCounsel[0].image_url}
+                  role2=""
+                />
+                <Person
+                  name={generalCounsel[1].name}
+                  role1={generalCounsel[1].role}
+                  image={generalCounsel[1].image_url}
+                  role2=""
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-auto lg:flex flex-col mt-12">
@@ -244,8 +248,9 @@ const OurTeam = () => {
             Tech Music , Dramatics Club , Astronomy Club , Animal Welfare Club ,
             WDC , Martial Arts Club
           </div>
-          <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
-            {/* <Person
+          {clubCat1.length > 0 && (
+            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
+              <Person
               name = {clubCat1[0].name}
               role2 = {clubCat1[0].role}
               image = {clubCat1[0].image_url}
@@ -256,8 +261,9 @@ const OurTeam = () => {
               role2 = {clubCat1[1].role}
               image = {clubCat1[1].image_url}
               role1 = ""
-            /> */}
-          </div>
+            />
+            </div>
+          )}
           <div className="text-center text-2xl mt-8 uppercase tracking-widest">
             Associated Clubs
           </div>
