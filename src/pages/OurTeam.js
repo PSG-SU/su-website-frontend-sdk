@@ -249,8 +249,9 @@ const OurTeam = () => {
             Tech Music , Dramatics Club , Astronomy Club , Animal Welfare Club ,
             WDC , Martial Arts Club
           </div>
-          <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
-            {/* <Person
+          {clubCat1.length > 0 && (
+            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
+            <Person
               name = {clubCat1[0].name}
               role2 = {clubCat1[0].role}
               image = {clubCat1[0].image_url}
@@ -261,8 +262,9 @@ const OurTeam = () => {
               role2 = {clubCat1[1].role}
               image = {clubCat1[1].image_url}
               role1 = ""
-            /> */}
+            />
           </div>
+          )}
           <div className="text-center text-2xl mt-8 uppercase tracking-widest">
             Associated Clubs
           </div>
