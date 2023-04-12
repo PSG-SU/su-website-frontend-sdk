@@ -7,10 +7,10 @@ import {
 import Layout from "./Layout";
 import { GALLERY_URL } from "../API/config";
 
-const Gallery =  () => {
+const Gallery = () => {
   const [eventMap, setEventmap] = useState({});
   const [events, setEvents] = useState([]);
-  useEffect( () => {
+  useEffect(() => {
     axios.get(`${GALLERY_URL}`).then((res) => {
       console.log("Gallery");
       let images = res.data.message;
@@ -30,7 +30,7 @@ const Gallery =  () => {
 
       for (let x in map) {
         eventList.push(x);
-        console.log(eventMap[x])
+        console.log(eventMap[x]);
       }
       // console.log(eventList);
       setEvents(eventList);
@@ -38,7 +38,7 @@ const Gallery =  () => {
     });
   }, []);
 
-  const GalleryAccordion = ({ title = ""}) => {
+  const GalleryAccordion = ({ title = "" }) => {
     // const photos = [];
     console.log(title);
     console.log(eventMap[title]);
@@ -59,7 +59,9 @@ const Gallery =  () => {
         </div>
         {!isHidden && (
           <div className="grid grid-cols-2 lg:grid-cols-6 gap-2">
-            {eventMap[title].length > 0 &&
+            {eventMap &&
+              eventMap[title] &&
+              eventMap[title].length > 0 &&
               eventMap[title].map((photo) => (
                 <img
                   // loading="lazy"
@@ -81,9 +83,7 @@ const Gallery =  () => {
           Our <span className="font-bold">Gallery</span>
         </h1>
         {events.length > 0 &&
-          events.map((event) => (
-            <GalleryAccordion title={event} />
-          ))}
+          events.map((event) => <GalleryAccordion title={event} />)}
         <div className="[column-width:33vw] md:[column-width:25vw] lg:[column-width:20vw] [column-gap:1rem] w-full mt-8 pr-8"></div>
       </div>
     </Layout>
