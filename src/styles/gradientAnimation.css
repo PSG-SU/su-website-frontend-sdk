@@ -1,0 +1,31 @@
+#skeleton-grid {
+  background: linear-gradient(90deg, #cdcdcd, #dadada, #cdcdcd, #dadada);
+  animation: gradient 3s ease-in-out infinite;
+  background-size: 400% 400%;
+  background-position: center;
+  color: transparent;
+  /* height: 100vh; */
+}
+
+#skeleton {
+  background: linear-gradient(90deg, #DDDBDD, #ffffff, #DDDBDD, #ffffff);
+  animation: gradient 3s ease-in-out infinite;
+  background-size: 400% 400%;
+  background-position: center;
+  color: transparent;
+  /* height: 100vh; */
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 50% 100%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
+}

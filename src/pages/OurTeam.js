@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IoSparklesOutline } from "react-icons/io5";
 import Layout from "./Layout";
-const Person = ({ name, role1 = "", image, role2 = "" }) => {
+const Person = ({ name, role1 = "", image, role2 = "", nowrap = false }) => {
   // console.log(image);
   return (
     <div className="flex-auto md:flex flex-col px-8 justify-center items-center text-center">
       {role1.length > 0 && (
-        <div className=" w-full mt-8 uppercase tracking-widest text-xl h-[20%] ">
+        <div className={`w-full mt-8 uppercase tracking-widest text-xl h-20 ${nowrap && "whitespace-nowrap"}`}>
           {role1}
         </div>
       )}
-      <div className={`${role1.length > 0 ? "h-[60%]" : "h-[70%]"}`}>
+      <div className={`h-52`}>
         {image && (
           <div
             className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] border-8 box-border"
@@ -24,10 +24,10 @@ const Person = ({ name, role1 = "", image, role2 = "" }) => {
           ></div>
         )}
       </div>
-      <div className=" w-full mt-8 font-bold text-lg h-[10%] whitespace-nowrap">
+      <div className=" w-full mt-4 font-bold text-lg h-[10%] whitespace-nowrap">
         {name}
       </div>
-      <div className=" font-semibold h-[10%] mt-8 text-indigo-700">{role2}</div>
+      <div className=" font-semibold h-[10%] text-indigo-700">{role2}</div>
     </div>
   );
 };
@@ -166,10 +166,10 @@ const OurTeam = () => {
 
   return (
     <Layout>
+      <h1 className="text-4xl uppercase text-center mt-16 w-full">
+        Our <span className="font-bold">Team</span>
+      </h1>
       <div className="flex flex-col items-center justify-center font-sans">
-        <div className="tracking-wider text-3xl mt-4">
-          OUR <span className="font-bold">TEAM</span>
-        </div>
         <div className="flex-auto lg:flex flex-row mt-4 w-full">
           <Person
             name={chief.name}
@@ -196,13 +196,13 @@ const OurTeam = () => {
             role2=""
           />
         </div>
-        <div className="flex-auto lg:flex flex-row items-center justify-center mt-16">
+        <div className="flex-auto lg:flex flex-row items-center justify-center mt-24">
           <div className="font-bold w-[50%]">
             <div className="font-bold text-2xl text-center">
               Student Welfare & Counselling
             </div>
             {studentCounsel.length > 0 && (
-              <div className="flex-auto lg:flex flex-row mt-4">
+              <div className="flex-auto lg:flex flex-row font-normal font-sans">
                 <Person
                   name={studentCounsel[0].name}
                   role1={studentCounsel[0].role}
@@ -223,7 +223,7 @@ const OurTeam = () => {
               General Counselling
             </div>
             {generalCounsel.length > 0 && (
-              <div className="flex-auto lg:flex flex-row mt-4">
+              <div className="flex-auto lg:flex flex-row font-normal font-sans">
                 <Person
                   name={generalCounsel[0].name}
                   role1={generalCounsel[0].role}
@@ -251,21 +251,21 @@ const OurTeam = () => {
           </div>
           {clubCat1.length > 0 && (
             <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
-            <Person
-              name = {clubCat1[0].name}
-              role2 = {clubCat1[0].role}
-              image = {clubCat1[0].image_url}
-              role1 = ""
-            />
-            <Person
-              name = {clubCat1[1].name}
-              role2 = {clubCat1[1].role}
-              image = {clubCat1[1].image_url}
-              role1 = ""
-            />
-          </div>
+              <Person
+                name={clubCat1[0].name}
+                role2={clubCat1[0].role}
+                image={clubCat1[0].image_url}
+                role1=""
+              />
+              <Person
+                name={clubCat1[1].name}
+                role2={clubCat1[1].role}
+                image={clubCat1[1].image_url}
+                role1=""
+              />
+            </div>
           )}
-          <div className="text-center text-2xl mt-8 uppercase tracking-widest">
+          <div className="text-center text-2xl mt-16 uppercase tracking-widest">
             Associated Clubs
           </div>
           <div className="font-bold text-center text-xl mt-4">
@@ -288,7 +288,7 @@ const OurTeam = () => {
               />
             </div>
           )}
-          <div className="text-center text-2xl mt-8 uppercase tracking-widest">
+          <div className="text-center text-2xl mt-16 uppercase tracking-widest">
             Associated Clubs
           </div>
           <div className="font-bold text-center text-xl mt-4">
@@ -312,16 +312,15 @@ const OurTeam = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col mt-12">
+        <div className="flex flex-col mt-24">
           <div className="font-bold text-3xl text-center">
             Office Bearers of the Students Union
           </div>
           <div className="flex-auto lg:flex flex-row items-center gap-x-8 justify-center mt-4 text-center">
             {getYears().map((year) => (
               <button
-                className={`rounded-2xl ${
-                  isClicked ? "bg-[#aea8a5]" : "bg-black"
-                } text-white px-4 py-2 mt-2`}
+                className={`rounded-2xl ${isClicked ? "bg-[#aea8a5]" : "bg-black"
+                  } text-white px-4 py-2 mt-2`}
                 onClick={() => {
                   setIsClicked(true);
                   console.log(year);
@@ -338,30 +337,35 @@ const OurTeam = () => {
               image={chair.image_url}
               role1={chair.role}
               role2={chair.deptyos}
+              nowrap
             />
             <Person
               name={CoChair.name}
               image={CoChair.image_url}
               role1={CoChair.role}
               role2={CoChair.deptyos}
+              nowrap
             />
             <Person
               name={Secremale.name}
               image={Secremale.image_url}
               role1={Secremale.role}
               role2={Secremale.deptyos}
+              nowrap
             />
             <Person
               name={Secrefemale.name}
               image={Secrefemale.image_url}
               role1={Secrefemale.role}
               role2={Secrefemale.deptyos}
+              nowrap
             />
             <Person
               name={SecreScie.name}
               image={SecreScie.image_url}
               role1={SecreScie.role}
               role2={SecreScie.deptyos}
+              nowrap
             />
           </div>
         </div>
