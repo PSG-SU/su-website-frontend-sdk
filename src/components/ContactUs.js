@@ -4,9 +4,9 @@ import { HiOutlineMail } from "react-icons/hi";
 import { IoLocationOutline } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 
-const ContactUs = () => {
+const ContactUs = ({ homePage=false }) => {
   return (
-    <footer className="bg-black w-full p-8 pb-[2.25rem] mt-4">
+    <footer className={`bg-black w-full p-8 pb-[2.25rem] ${!homePage && "mt-4"}`}>
       <h1 className="text-white font-sans tracking-wider text-4xl uppercase font-semibold">
         Contact Us
       </h1>
