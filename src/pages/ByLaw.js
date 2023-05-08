@@ -32,15 +32,15 @@ const ByLaw = () => {
         SU <span className="font-bold">By Law</span>
       </h1>
       <div className='w-full flex justify-center'>
-        <div className="mt-4 h-[calc(100vh-6rem)] w-full px-4 lg:px-0 lg:w-3/4">
-          {content[0]?.file_url && (
+        <div className="mt-8 h-[calc(100vh-6rem)] w-full px-4 lg:px-0 lg:w-3/4">
+          {content?.file_url && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.min.js">
-              <Viewer fileUrl={content[0]?.file_url}
+              <Viewer fileUrl={content?.file_url}
                 plugins={[defaultLayoutPluginInstance]}></Viewer>
             </Worker>
           )}
 
-          {!content[0]?.file_url && <div className='text-center'>Unable to load file</div>}
+          {!content?.file_url && <div className='text-center'>Unable to load file</div>}
 
         </div>
       </div>

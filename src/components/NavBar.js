@@ -61,6 +61,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
         <div className="items-center space-x-6 text-sm hidden lg:flex">
           <NavItem text="SU By Law" to="/by-law" />
           <NavItem text="Clubs" to="/clubs" />
+          <NavItem text="Associations" to="/associations" />
           <NavItem text="SU Feed" to="/feed" />
           <NavItem text="Gallery" to="/gallery" />
           <NavItem text="Our Team" to="/team"/>

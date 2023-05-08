@@ -11,7 +11,7 @@ function ClubListing(props) {
           <img className={"rounded-t-lg hover:scale-110 ease-in-out duration-300 h-[17.75rem] object-contain"} src={props.clubImage} alt="club-logo" />
         </div>
         <div className={"p-4 pt-8"}>
-          <h5 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">{props.clubName}</h5>
+          <h5 className={`mb-2 text-[1.6rem] font-bold tracking-tight text-gray-900`}>{props.clubName}</h5>
           <p class="mb-3 font-normal text-gray-700"><i>{props.clubTagLine}</i></p>
         </div>
       </div>
@@ -33,14 +33,14 @@ const ClubLoading = () => {
 }
 
 
-const Clubs = () => {
-  const [clubs, setClubs] = useState([]);
+const Associations = () => {
+  const [assoc, setAssoc] = useState([]);
 
   useEffect(() => {
     fetchAllClubsLogo()
       .then((res) => {
-        console.log(res.data.filter(i => i.category === "Clubs").sort((a, b) => a.clubName.localeCompare(b.clubName)));
-        setClubs(res.data.filter(i => i.category === "Clubs").sort((a, b) => a.clubName.localeCompare(b.clubName)));
+        console.log(res.data.filter(i => i.category === "Associations").sort((a, b) => a.clubName.localeCompare(b.clubName)));
+        setAssoc(res.data.filter(i => i.category === "Associations").sort((a, b) => a.clubName.localeCompare(b.clubName)));
       })
       .catch((err) => {
         console.log(err);
@@ -50,18 +50,18 @@ const Clubs = () => {
   return (
     <Layout>
       <h1 className="text-4xl uppercase text-center mt-16">
-        Our <span className="font-bold">Clubs</span>
+        Our <span className="font-bold">Associations</span>
       </h1>
       <div className={'flex flex-wrap justify-center gap-8 px-12 lg:px-0 py-12'}>
         {
-          clubs.length > 0 ? (
-            clubs?.map((club) => {
+          assoc.length > 0 ? (
+            assoc?.map((ass) => {
               return (
                 <ClubListing
-                  clubName={club.clubName}
-                  clubTagLine={club.data?.tagline ? club.data?.tagline : "Smells like paper, right outta press"}
-                  clubImage={club.image_url ? club.image_url : "https://upload.wikimedia.org/wikipedia/en/e/eb/PSG_College_of_Technology_logo.png"}
-                  clubLink={`/club/${club.clubId}`}
+                  clubName={ass.clubName}
+                  clubTagLine={ass.data?.tagline ? ass.data?.tagline : "Smells like paper, right outta press"}
+                  clubImage={ass.image_url ? ass.image_url : "https://upload.wikimedia.org/wikipedia/en/e/eb/PSG_College_of_Technology_logo.png"}
+                  clubLink={`/club/${ass.clubId}`}
                 />
               )
             })
@@ -77,4 +77,4 @@ const Clubs = () => {
   );
 };
 
-export default Clubs;
+export default Associations;
