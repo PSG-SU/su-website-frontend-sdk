@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { BiShareAlt } from 'react-icons/bi';
-import { BsCalendarWeek, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { BsCalendar, BsCalendarWeek, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { CLUB_URL, FEED_URL, CLUB_GENERAL_URL } from '../API/config';
 import { toast } from 'react-hot-toast';
 import { FiAlertCircle, FiUserPlus } from 'react-icons/fi';
+import { IoLocationSharp } from 'react-icons/io5';
+import { MdAccessTime } from 'react-icons/md';
 
 const Feed = ({ id = "all" }) => {
   const navigate = useNavigate();
@@ -67,10 +69,14 @@ const Feed = ({ id = "all" }) => {
     return date.split("T")[0].split("-").join("") + "T" + date.split("T")[1].split(".")[0].split(":").join("") + "Z";
   }
 
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   return (
     <div className='font-sans overflow-x-hidden space-y-6'>
       {event && event.length > 0 ?
         event.slice(0).reverse().map((ev, index) => {
+          const dateTime = new Date(ev.startDate);
+
           return (
             <section className="w-full border-gray-400 border-2 rounded-lg"
               id={ev.eventName}
@@ -80,7 +86,7 @@ const Feed = ({ id = "all" }) => {
                 <header className="flex items-center space-x-4">
                   <button className="rounded-full w-10 h-10 aspect-square" onClick={(e) => { navigate(`/club/${ev.user}`) }}
                     style={{
-                      backgroundImage: `url(${generals.filter((general) => general.user === ev.user)[0]?.image_url})`,
+                      backgroundImage: `url(${generals.filter((general) => general.user === ev.user)[0]?.image_url ? generals.filter((general) => general.user === ev.user)[0]?.image_url : "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png"})`,
                       backgroundSize: "contain",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat"
@@ -97,6 +103,26 @@ const Feed = ({ id = "all" }) => {
                     </div>
                   </button>
                 </header>
+                <div className='flex flex-row justify-around my-8 font-poppins text-lg text-gray-700 font-semibold'>
+                  <div className="flex items-center space-x-4">
+                    <IoLocationSharp size={24} />
+                    <p className="">{ev.venue}</p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <MdAccessTime size={24} />
+                    <p className="">
+                      {(dateTime.getHours() < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) <= 12 ?
+                        dateTime.getHours() :
+                        ((parseInt(dateTime.getHours().toString()) - 12 < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) - 12)))}
+                      {' '}: {(dateTime.getMinutes() < 10 && '0') + dateTime.getMinutes()}
+                      {dateTime.getHours() < 12 ? " AM" : " PM"}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <BsCalendar size={24} />
+                    <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
+                  </div>
+                </div>
                 <p className="mt-4">{ev.description}</p>
               </div>
               {
@@ -175,7 +201,7 @@ const Feed = ({ id = "all" }) => {
               <div className="w-full flex p-6 space-x-4">
                 <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
                   onClick={() => {
-                    window.open("https://" + ev.registrationLink, "_blank");
+                    window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
                   }}
                 >
                   <FiUserPlus className="inline-block mr-3 mb-1 text-xl" />
@@ -216,6 +242,11 @@ const Feed = ({ id = "all" }) => {
                     <div className="h-4 w-24 rounded-md mt-1" id="skeleton"></div>
                   </div>
                 </header>
+                <div className='flex flex-row justify-around space-x-8 my-8'>
+                  <div className="h-10 w-1/3 rounded-lg" id="skeleton"></div>
+                  <div className="h-10 w-1/3 rounded-lg" id="skeleton"></div>
+                  <div className="h-10 w-1/3 rounded-lg" id="skeleton"></div>
+                </div>
                 <div className='h-4 w-3/4 rounded-md mt-8' id="skeleton"></div>
                 <div className='h-4 w-1/2 rounded-md mt-1' id="skeleton"></div>
               </div>

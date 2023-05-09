@@ -14,26 +14,10 @@ import Feed from "../components/Feed";
 const ClubLanding = () => {
   const { id } = useParams();
 
-  const BANNER_IMG =
-    "https://images.unsplash.com/photo-1581417478175-a9ef18f210c2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80";
-  const LOGO_IMG =
-    "https://images.unsplash.com/photo-1617727553252-65863c156eb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80";
-
   const toTitleCase = (phrase) => {
-    const wordsToIgnore = ["of", "in", "for", "and", "an", "or"];
-    const wordsToCapitalize = ["it", "cad"];
-
     return phrase?.toLowerCase()
       .split(" ")
-      .map((word) => {
-        if (wordsToIgnore.includes(word)) {
-          return word;
-        }
-        if (wordsToCapitalize.includes(word)) {
-          return word.toUpperCase();
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
+      .map((word) => { return word.charAt(0).toUpperCase() + word.slice(1); })
       .join(" ");
   };
 
@@ -89,7 +73,7 @@ const ClubLanding = () => {
           <div
             className="w-64 h-64 aspect-square rounded-full border-8 border-gray-200 ml-16"
             style={
-              generalDetails
+              generalDetails?.general?.image_url
                 ? {
                   background: `url(${generalDetails.general.image_url})`,
                   backgroundSize: "contain",
@@ -98,6 +82,10 @@ const ClubLanding = () => {
                 }
                 : {
                   background: "#C0BBBB",
+                  backgroundImage: "url(https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png)",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }
             }
           ></div>
