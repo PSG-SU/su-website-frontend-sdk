@@ -6,6 +6,7 @@ module.exports = {
       sans: ['"Open Sans"', "sans-serif"],
       serif: ["Merriweather", "serif"],
       cursive: ["Freehand", "cursive"],
+      poppins: ["'Poppins'", "sans-serif"],
     },
   },
   variants: {

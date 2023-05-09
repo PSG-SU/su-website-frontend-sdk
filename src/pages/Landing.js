@@ -93,16 +93,16 @@ const HeroCover = ({ image, h1, h2 }) => {
         <div className="text-5xl lg:text-7xl uppercase font-sans text-transparent font-bold select-none [-webkit-text-stroke-width:1px] lg:[-webkit-text-stroke-width:2px] [-webkit-text-stroke-color:#fff]">
           <p className="">{h1}</p>
         </div>
-        <div className="flex space-x-4 mt-4 w-full">
+        <div className="flex space-x-6 mt-4 w-full">
           <div className="h-full flex items-start">
             <FaQuoteLeft size={32} className="text-white hidden lg:block" />
             <FaQuoteLeft size={24} className="text-white lg:hidden" />
           </div>
           <div className="flex items-end">
-            <p className="text-white  lg:text-lg w-full lg:w-[60%] font-serif">
+            <p className="text-white lg:text-lg w-full lg:w-[60%] font-serif">
               {h2}
             </p>
-            <div className="">
+            <div className="-ml-3">
               <FaQuoteRight size={32} className="text-white hidden lg:block" />
               <FaQuoteRight size={24} className="text-white lg:hidden" />
             </div>

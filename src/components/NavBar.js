@@ -22,7 +22,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
   });
 
   return (
-    <nav className="fixed z-10 h-auto w-full">
+    <nav className="fixed z-50 h-auto w-full">
       <div
         className={`flex justify-between items-center  w-full ${
           onTop
@@ -44,13 +44,13 @@ const Navbar = ({ canScrollAdjust = false }) => {
           <div className="space-y-0.5">
             <h1
               className={`${
-                onTop ? "text-lg lg:text-3xl" : "text-lg"
-              } font-serif text-white`}
+                onTop ? "text-xl lg:text-3xl" : "text-xl"
+              } font-poppins font-[500] text-white`}
             >
               Students Union
             </h1>
             <h2
-              className={`text-xs lg:text-sm text-left font-serif text-white ${
+              className={`text-xs lg:text-sm text-left font-poppins text-white ${
                 !onTop && "hidden"
               }`}
             >
