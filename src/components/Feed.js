@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { BiShareAlt } from 'react-icons/bi';
 import { BsCalendarWeek, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import { CLUB_URL, FEED_URL } from '../API/config';
+import { CLUB_URL, FEED_URL, CLUB_GENERAL_URL } from '../API/config';
 import { toast } from 'react-hot-toast';
 import { FiAlertCircle, FiUserPlus } from 'react-icons/fi';
 
@@ -11,7 +11,10 @@ const Feed = ({ id = "all" }) => {
   const navigate = useNavigate();
   const [event, setEvent] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [generals, setGenerals] = useState([]);
   const [imageIndices, setImageIndices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [nextCircle, setNextCircle] = useState(0);
 
   useEffect(() => {
     axios
@@ -34,8 +37,31 @@ const Feed = ({ id = "all" }) => {
   }, []);
 
   useEffect(() => {
+    axios.get(`${CLUB_GENERAL_URL}`, {}).then((res) => {
+      setGenerals(res.data);
+    }).catch(err => console.log(err));
+  }, []);
+
+  useEffect(() => {
     setImageIndices(new Array(event?.length).fill(0));
   }, [event]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (nextCircle === 4) {
+        setNextCircle(0);
+      } else {
+        setNextCircle(nextCircle + 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [nextCircle]);
 
   const DateFormat = ({ date }) => {
     return date.split("T")[0].split("-").join("") + "T" + date.split("T")[1].split(".")[0].split(":").join("") + "Z";
@@ -52,7 +78,14 @@ const Feed = ({ id = "all" }) => {
             >
               <div className="p-6 border-b-gray-400 border-b-2">
                 <header className="flex items-center space-x-4">
-                  <button className="rounded-full w-10 h-10 aspect-square bg-gray-600" onClick={(e) => { navigate(`/club/${ev.user}`) }}></button>
+                  <button className="rounded-full w-10 h-10 aspect-square" onClick={(e) => { navigate(`/club/${ev.user}`) }}
+                    style={{
+                      backgroundImage: `url(${generals.filter((general) => general.user === ev.user)[0]?.image_url})`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat"
+                    }}
+                  ></button>
                   <button className="" onClick={(e) => { navigate(`/club/${ev.user}`) }}>
                     <div className="flex items-center space-x-1">
                       <p className="text-lg font-semibold">{ev.eventName}</p>
@@ -162,7 +195,7 @@ const Feed = ({ id = "all" }) => {
                   className="text-gray-600 hover:text-gray-700"
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href + "#" + ev.eventName);
-                    toast.success("Copied to clipboard!");
+                    toast.success("Link copied to clipboard!");
                   }}
                 >
                   <BiShareAlt size={30} />
@@ -173,12 +206,45 @@ const Feed = ({ id = "all" }) => {
           )
         })
         : (
-          <section className="bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full flex space-x-4 justify-center items-center">
-            <FiAlertCircle size={24} />
-            <p className="">
-              This club has not posted any events yet.
-            </p>
-          </section>
+          loading ? (
+            <section className="w-full border-gray-200 border-2 rounded-lg">
+              <div className="p-6 border-b-gray-200 border-b-2 bg-gray-200">
+                <header className="flex items-center space-x-4">
+                  <div className="rounded-full w-10 h-10 aspect-square" id="skeleton"></div>
+                  <div>
+                    <div className='h-4 w-32 rounded-md' id="skeleton"></div>
+                    <div className="h-4 w-24 rounded-md mt-1" id="skeleton"></div>
+                  </div>
+                </header>
+                <div className='h-4 w-3/4 rounded-md mt-8' id="skeleton"></div>
+                <div className='h-4 w-1/2 rounded-md mt-1' id="skeleton"></div>
+              </div>
+              <div>
+                <div className="w-full h-[20rem]"></div>
+                <div className='w-full flex justify-center pt-8 pb-4 border-gray-200 border-t-2 bg-gray-200'>
+                  {
+                    [...Array(5)].map((val, index) => {
+                      return (
+                        <div className={`w-3 h-3 rounded-full border-2 border-gray-400 ${nextCircle === index && "bg-gray-400"} inline-block mx-2`}></div>
+                      )
+                    })
+                  }
+                </div>
+              </div>
+              <div className="w-full flex p-6 space-x-4 bg-gray-200">
+                <div className='w-1/2 h-12 rounded-lg' id="skeleton"></div>
+                <div className='w-1/2 h-12 rounded-lg' id="skeleton"></div>
+              </div>
+            </section>
+          ) : (
+            <section className="bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full flex space-x-4 justify-center items-center">
+              <FiAlertCircle size={26} />
+              <p className="">
+                Uh oh! Looks like there are no events to show here. Please check
+                back later.
+              </p>
+            </section>
+          )
         )
       }
     </div>

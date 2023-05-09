@@ -47,8 +47,8 @@ const SUFeed = () => {
           <p className="text-gray-400">No featured posts yet.</p>
         </div>
         <div className="w-full lg:w-1/2 font-sans overflow-x-hidden space-y-6">
-          <section className="bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full flex space-x-4 justify-start items-center">
-            <FiAlertCircle size={48} />
+          <section className="bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full flex space-x-4 justify-center items-center">
+            <FiAlertCircle size={56} />
             <p className="">
               This is a compilation of all the events, alerts, circulars passed
               within the institute. Students are adviced to check this feed

@@ -1,8 +1,7 @@
 import React from "react";
 
-import { HiOutlineMail } from "react-icons/hi";
-import { IoLocationOutline, IoLocationSharp, IoLogoYoutube } from "react-icons/io5";
-import { BsInstagram, BsLinkedin, BsTelephone } from "react-icons/bs";
+import { IoLocationSharp, IoLogoYoutube } from "react-icons/io5";
+import { BsInstagram, BsLinkedin } from "react-icons/bs";
 import { SiGmail } from "react-icons/si";
 import { MdPhone } from "react-icons/md";
 import { Icon } from '@iconify/react';
@@ -55,7 +54,7 @@ const ContactUs = ({ homePage = false }) => {
               onClick={() => window.open("https://www.youtube.com/c/StudentsUnionPSGTech", "_blank")}
             >
               <IoLogoYoutube size={24} />
-              <p className="text-lg">StudentsUnionPSGTech</p>
+              <p className="text-lg">Students Union PSG Tech</p>
             </button>
           </div>
 

@@ -40,7 +40,9 @@ const ByLaw = () => {
             </Worker>
           )}
 
-          {!content?.file_url && <div className='text-center'>Unable to load file</div>}
+          {!content?.file_url && <div className='w-full flex justify-center'>
+            <img src="https://i.ibb.co/PZLc3WF/wired-outline-334-loader-5.gif" width={"100px"} alt="Loading..." border="0" />
+          </div>}
 
         </div>
       </div>
