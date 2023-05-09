@@ -1,43 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { IoSparklesOutline } from "react-icons/io5";
 import Layout from "./Layout";
-const Person = ({ name, role1 = "", image, role2 = "", nowrap = false }) => {
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = false }) => {
   // console.log(image);
   return (
-    <div className="flex-auto md:flex flex-col px-8 justify-center items-center text-center">
+    <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
       {role1.length > 0 && (
-        <div className={`w-full mt-8 uppercase tracking-widest text-xl h-20 ${nowrap && "whitespace-nowrap"}`}>
+        <div className={`mt-12 lg:mt-8 mb-4 uppercase tracking-widest text-xl ${nowrap && "whitespace-nowrap"}`}>
           {role1}
         </div>
       )}
-      <div className={`h-52`}>
+      <div className={`min-w-max h-52 group flex justify-center`}>
         {image && (
-          <div
-            className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] border-8 box-border"
-            style={{
-              background: `url(${image})`,
-              backgroundSize: "cover ",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          ></div>
+          <img src={image} alt={name} className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] group-hover:border-[#8becc8] transition-all ease-in-out border-8 box-border object-cover" />
         )}
       </div>
-      <div className=" w-full mt-4 font-bold text-lg h-[10%] whitespace-nowrap">
+      <div className=" w-full mt-4 mb-1 font-bold text-lg">
         {name}
       </div>
-      <div className=" font-semibold h-[10%] text-indigo-700">{role2}</div>
+      <div className="font-semibold text-indigo-700">{role2}</div>
     </div>
   );
-};
-
-const getYears = () => {
-  let years = [];
-  for (let i = 2015; i <= new Date().getFullYear(); i++) {
-    years.push(`${i}-${i + 1}`);
-  }
-  return years;
 };
 
 const OurTeam = () => {
@@ -47,8 +32,6 @@ const OurTeam = () => {
   const [Secremale, setSecremale] = useState({});
   const [Secrefemale, setSecrefemale] = useState({});
   const [SecreScie, setSecreScie] = useState({});
-  const [yearButton, setYearButton] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
   const [chief, setChief] = useState({});
   const [patron, setPatron] = useState({});
   const [deanStudent, setDeanStudent] = useState({});
@@ -58,6 +41,24 @@ const OurTeam = () => {
   const [clubCat1, setClubCat1] = useState([]);
   const [clubCat2, setClubCat2] = useState([]);
   const [clubCat3, setClubCat3] = useState([]);
+  const [years, setYears] = useState([]);
+  const [yearButton, setYearButton] = useState([]);
+  const [clickedYear, setClickedYear] = useState(`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`);
+  const [endYear, setEndYear] = useState("");
+  const startYear = 2015;
+
+  useEffect(() => {
+    setYears([]);
+    if (window.innerWidth < 768) {
+      for (let i = endYear - 1; i <= endYear; i++) {
+        setYears((years) => [...years, `${i}-${i + 1}`]);
+      }
+    } else {
+      for (let i = endYear - 6; i <= endYear; i++) {
+        setYears((years) => [...years, `${i}-${i + 1}`]);
+      }
+    }
+  }, [endYear]);
 
   useEffect(() => {
     if (yearButton) {
@@ -98,7 +99,15 @@ const OurTeam = () => {
         }
         // console.log(year_wise);
         setTeam(year_wise);
-        setYearButton(year_wise["2022-2023"]);
+
+        if (year_wise[`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`]) {
+          setYearButton(year_wise[`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`]);
+        }
+        else {
+          setClickedYear(`${new Date().getFullYear() - 1}-${new Date().getFullYear()}`);
+          setYearButton(year_wise[`${new Date().getFullYear() - 1}-${new Date().getFullYear()}`]);
+          setEndYear(new Date().getFullYear() - 1);
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -169,7 +178,7 @@ const OurTeam = () => {
       <h1 className="text-4xl uppercase text-center mt-16 w-full">
         Our <span className="font-bold">Team</span>
       </h1>
-      <div className="flex flex-col items-center justify-center font-sans">
+      <div className="flex flex-col items-center justify-center font-sans px-4 lg:px-0">
         <div className="flex-auto lg:flex flex-row mt-4 w-full">
           <Person
             name={chief.name}
@@ -197,7 +206,7 @@ const OurTeam = () => {
           />
         </div>
         <div className="flex-auto lg:flex flex-row items-center justify-center mt-24">
-          <div className="font-bold w-[50%]">
+          <div className="font-bold w-full lg:w-1/2">
             <div className="font-bold text-2xl text-center">
               Student Welfare & Counselling
             </div>
@@ -218,7 +227,7 @@ const OurTeam = () => {
               </div>
             )}
           </div>
-          <div className="font-bold w-[50%]">
+          <div className="font-bold w-full lg:w-1/2">
             <div className="font-bold text-2xl text-center">
               General Counselling
             </div>
@@ -250,7 +259,7 @@ const OurTeam = () => {
             WDC , Martial Arts Club
           </div>
           {clubCat1.length > 0 && (
-            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
+            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
               <Person
                 name={clubCat1[0].name}
                 role2={clubCat1[0].role}
@@ -273,7 +282,7 @@ const OurTeam = () => {
             Arts Club, YRC, Rotaract Club, Radio Hub
           </div>
           {clubCat2.length > 0 && (
-            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 ">
+            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
               <Person
                 name={clubCat2[0].name}
                 role2={clubCat2[0].role}
@@ -296,7 +305,7 @@ const OurTeam = () => {
             (Alumni)-Interaction Forum, Book Readers Club
           </div>
           {clubCat3.length > 0 && (
-            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4">
+            <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
               <Person
                 name={clubCat3[0].name}
                 role2={clubCat3[0].role}
@@ -312,32 +321,58 @@ const OurTeam = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col mt-24">
+        <div className="flex flex-col mt-24 w-full">
           <div className="font-bold text-3xl text-center">
             Office Bearers of the Students Union
           </div>
-          <div className="flex-auto lg:flex flex-row items-center gap-x-8 justify-center mt-4 text-center">
-            {getYears().map((year) => (
+          <div className="flex flex-row justify-between">
+            <div className="w-10 lg:w-20 flex items-end justify-end lg:justify-start">
               <button
-                className={`rounded-2xl ${isClicked ? "bg-[#aea8a5]" : "bg-black"
-                  } text-white px-4 py-2 mt-2`}
+                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block"}`}
                 onClick={() => {
-                  setIsClicked(true);
-                  console.log(year);
-                  setYearButton(team[year]);
+                  if (years[0].split("-")[0] - 1 < startYear) return;
+                  setYears([`${years[0].split("-")[0] - 1}-${years[0].split("-")[0]}`, ...years.slice(0, years.length - 1)])
                 }}
               >
-                {year}
+                <FiChevronLeft className="text-[2.5rem] text-gray-500 lg:hover:text-black transition-all ease-in-out" />
               </button>
-            ))}
+            </div>
+            <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 justify-center mt-4 text-center">
+              {years.map((year) => (
+                <button
+                  className={`rounded-2xl ${year === clickedYear ? "bg-black" : "bg-gray-400"
+                    } text-white px-4 py-2 mt-2`}
+                  onClick={() => {
+                    console.log(year);
+                    console.log(team[year]);
+                    setClickedYear(year);
+                    setYearButton(team[year]);
+                  }}
+                >
+                  {year.split("-")[0]}{" - "}{year.split("-")[1]}
+                </button>
+              ))}
+            </div>
+            <div className="w-10 lg:w-20 flex justify-start lg:justify-end items-end">
+              <button
+                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block"}`}
+                onClick={() => {
+                  if (years[years.length - 1].split("-")[1] > endYear) return;
+                  setYears([...years.slice(1, years.length), `${years[years.length - 1].split("-")[1]}-${parseInt(years[years.length - 1].split("-")[1]) + 1}`])
+                }}
+              >
+                <FiChevronRight className="text-[2.5rem] text-gray-500 lg:hover:text-black transition-all ease-in-out" />
+              </button>
+            </div>
           </div>
-          <div className="flex-auto lg:flex flex-row  mt-4">
+          <div className="flex flex-col lg:flex-row mt-4 mb-12 w-full">
             <Person
               name={chair.name}
               image={chair.image_url}
               role1={chair.role}
               role2={chair.deptyos}
               nowrap
+              ob
             />
             <Person
               name={CoChair.name}
@@ -345,6 +380,7 @@ const OurTeam = () => {
               role1={CoChair.role}
               role2={CoChair.deptyos}
               nowrap
+              ob
             />
             <Person
               name={Secremale.name}
@@ -352,6 +388,7 @@ const OurTeam = () => {
               role1={Secremale.role}
               role2={Secremale.deptyos}
               nowrap
+              ob
             />
             <Person
               name={Secrefemale.name}
@@ -359,13 +396,14 @@ const OurTeam = () => {
               role1={Secrefemale.role}
               role2={Secrefemale.deptyos}
               nowrap
+              ob
             />
             <Person
               name={SecreScie.name}
               image={SecreScie.image_url}
               role1={SecreScie.role}
               role2={SecreScie.deptyos}
-              nowrap
+              ob
             />
           </div>
         </div>

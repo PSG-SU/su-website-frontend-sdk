@@ -13,11 +13,11 @@ const ContactUs = ({ homePage = false }) => {
     <React.Fragment>
       <section
         id="section9"
-        className={`w-screen bg-black px-[calc(100vw/16)] pt-16 pb-8 font-poppins ${!homePage && "mt-4"}`}
+        className={`w-screen bg-black px-[calc(100vw/16)] pt-16 pb-8 font-poppins ${!homePage && "mt-8"}`}
       >
         <h1 className="text-[2.75rem] text-white font-semibold pb-6">Contact Us</h1>
-        <div className="flex flex-col lg:flex-row gap-8 text-white mt-8">
-          <div className="space-y-6 w-[30%]">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 text-white mt-8">
+          <div className="space-y-6 w-full lg:w-[30%]">
             <button
               className="flex items-center space-x-4 text-gray-300 hover:text-white transition-all ease-in-out duration-300"
               onClick={() =>
@@ -58,7 +58,7 @@ const ContactUs = ({ homePage = false }) => {
             </button>
           </div>
 
-          <div className="w-[40%] space-y-6">
+          <div className="w-full lg:w-[40%] space-y-6">
             <button
               className="flex items-center space-x-4 text-gray-300 hover:text-white transition-all ease-in-out duration-300"
               onClick={() =>
@@ -72,8 +72,8 @@ const ContactUs = ({ homePage = false }) => {
               className="flex items-center space-x-4 text-gray-300 hover:text-white transition-all ease-in-out duration-300"
               onClick={() => window.open("https://goo.gl/maps/vC8ETQHr43EvvZmz6", "_blank")}
             >
-              <IoLocationSharp size={24} />
-              <p className="text-lg">F Block 2nd Floor, PSG College of Technology</p>
+              <IoLocationSharp size={24} className="w-8 lg:w-auto" />
+              <p className="text-lg text-left">F Block 2nd Floor, PSG College of Technology</p>
             </button>
             <button
               className="flex items-center space-x-4 text-gray-300 hover:text-white transition-all ease-in-out duration-300"
@@ -84,14 +84,14 @@ const ContactUs = ({ homePage = false }) => {
             </button>
           </div>
 
-          <div className="w-[30%]">
+          <div className="w-full lg:w-[30%]">
             <PSGMap />
           </div>
         </div>
 
         <div className="h-[0.1rem] bg-[#4D4D4D] w-full mt-16 mb-8"></div>
 
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 pb-12 lg:pb-0 items-center justify-between">
           <div className="flex flex-row space-x-4 items-center">
             <img
               src="https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png"
