@@ -98,17 +98,21 @@ const Feed = ({ id = "all" }) => {
                       {/* <p className="">:</p>
                   <p className=" text-gray-500">1d</p> */}
                     </div>
-                    <div className="text-base text-gray-500">
+                    <div className="text-base text-gray-500 text-left">
                       {clubs.filter((club) => club.clubId === ev.user)[0]?.clubName}
                     </div>
                   </button>
                 </header>
-                <div className='flex flex-row justify-around my-8 font-poppins text-lg text-gray-700 font-semibold'>
-                  <div className="flex items-center space-x-4">
+                <div className='flex flex-col-reverse lg:flex-row items-center space-y-2 lg:space-y-0 justify-around my-6 font-poppins text-lg text-gray-700 font-semibold'>
+                  <div className="flex items-center space-x-2 lg:space-x-4 pt-4 lg:pt-0">
                     <IoLocationSharp size={24} />
                     <p className="">{ev.venue}</p>
                   </div>
-                  <div className="flex items-center space-x-4">
+                  <div className="hidden lg:flex items-center space-x-4">
+                    <BsCalendar size={24} />
+                    <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
+                  </div>
+                  <div className="hidden lg:flex items-center space-x-4">
                     <MdAccessTime size={24} />
                     <p className="">
                       {(dateTime.getHours() < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) <= 12 ?
@@ -118,9 +122,21 @@ const Feed = ({ id = "all" }) => {
                       {dateTime.getHours() < 12 ? " AM" : " PM"}
                     </p>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <BsCalendar size={24} />
-                    <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
+                  <div className='lg:hidden flex flex-row justify-between px-1 w-full'>
+                    <div className="flex items-center space-x-2">
+                      <BsCalendar size={24} />
+                      <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <MdAccessTime size={24} />
+                      <p className="">
+                        {(dateTime.getHours() < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) <= 12 ?
+                          dateTime.getHours() :
+                          ((parseInt(dateTime.getHours().toString()) - 12 < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) - 12)))}
+                        {' '}: {(dateTime.getMinutes() < 10 && '0') + dateTime.getMinutes()}
+                        {dateTime.getHours() < 12 ? " AM" : " PM"}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <p className="mt-4">{ev.description}</p>
@@ -128,9 +144,9 @@ const Feed = ({ id = "all" }) => {
               {
                 ev.images && ev.images.length > 0 && (
                   <div>
-                    <div className="w-full h-auto max-h-[36rem] relative group">
+                    <div className="w-full h-auto max-h-[40rem] relative group">
                       <button
-                        className="bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one"
+                        className="hidden lg:block bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one"
                         onClick={() => {
                           if (imageIndices[index] > 0) {
                             setImageIndices(imageIndices.map((val, i) => i === index ? val - 1 : val));
@@ -141,9 +157,9 @@ const Feed = ({ id = "all" }) => {
                       >
                         <BsChevronLeft className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
                       </button>
-                      <img src={ev.images[imageIndices[index]]} alt={ev.eventName} className="w-full h-auto max-h-[36rem] object-contain" />
+                      <img src={ev.images[imageIndices[index]]} alt={ev.eventName} className="w-full h-auto max-h-[40rem] object-contain" />
                       <button
-                        className="bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one"
+                        className="hidden lg:block bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one"
                         onClick={() => {
                           if (imageIndices[index] < ev.images.length - 1) {
                             setImageIndices(imageIndices.map((val, i) => i === index ? val + 1 : val));
@@ -155,9 +171,9 @@ const Feed = ({ id = "all" }) => {
                         <BsChevronRight className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
                       </button>
                     </div>
-                    <div className="w-full py-4 flex items-center justify-between">
+                    <div className="w-full py-4 flex items-center justify-between lg:justify-center">
                       <button
-                        className="group w-10 h-10 pl-4"
+                        className="lg:hidden group w-10 h-10 pl-4"
                         onClick={() => {
                           if (imageIndices[index] > 0) {
                             setImageIndices(imageIndices.map((val, i) => i === index ? val - 1 : val));
@@ -184,7 +200,7 @@ const Feed = ({ id = "all" }) => {
                       </div>
 
                       <button
-                        className="group w-10 h-10 pr-4"
+                        className="lg:hidden group w-10 h-10 pr-4"
                         onClick={() => {
                           if (imageIndices[index] < ev.images.length - 1) {
                             setImageIndices(imageIndices.map((val, i) => i === index ? val + 1 : val));
@@ -198,7 +214,7 @@ const Feed = ({ id = "all" }) => {
                     </div>
                   </div>
                 )}
-              <div className="w-full flex p-6 space-x-4">
+              <div className="w-full flex flex-col lg:flex-row p-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
                 <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
                   onClick={() => {
                     window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
@@ -218,7 +234,7 @@ const Feed = ({ id = "all" }) => {
                 </button>
 
                 <button
-                  className="text-gray-600 hover:text-gray-700"
+                  className="hidden lg:block text-gray-600 hover:text-gray-700"
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href + "#" + ev.eventName);
                     toast.success("Link copied to clipboard!");
@@ -268,7 +284,7 @@ const Feed = ({ id = "all" }) => {
               </div>
             </section>
           ) : (
-            <section className="bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full flex space-x-4 justify-center items-center">
+            <section className="hidden lg:flex bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full space-x-4 justify-center items-center">
               <FiAlertCircle size={26} />
               <p className="">
                 Uh oh! Looks like there are no events to show here. Please check

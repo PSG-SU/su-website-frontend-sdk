@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "./Layout";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = false }) => {
   // console.log(image);
@@ -325,22 +325,22 @@ const OurTeam = () => {
           <div className="font-bold text-3xl text-center">
             Office Bearers of the Students Union
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between items-end">
             <div className="w-10 lg:w-20 flex items-end justify-end lg:justify-start">
               <button
-                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block"}`}
+                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-1 lg:-mb-1 shadow-lg"}`}
                 onClick={() => {
                   if (years[0].split("-")[0] - 1 < startYear) return;
                   setYears([`${years[0].split("-")[0] - 1}-${years[0].split("-")[0]}`, ...years.slice(0, years.length - 1)])
                 }}
               >
-                <FiChevronLeft className="text-[2.5rem] text-gray-500 lg:hover:text-black transition-all ease-in-out" />
+                <BiChevronLeft className="text-[2rem] lg:text-[2.5rem] text-white" />
               </button>
             </div>
             <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 justify-center mt-4 text-center">
               {years.map((year) => (
                 <button
-                  className={`rounded-2xl ${year === clickedYear ? "bg-black" : "bg-gray-400"
+                  className={`rounded-2xl ${year === clickedYear ? "bg-black" : "bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out"
                     } text-white px-4 py-2 mt-2`}
                   onClick={() => {
                     console.log(year);
@@ -355,13 +355,13 @@ const OurTeam = () => {
             </div>
             <div className="w-10 lg:w-20 flex justify-start lg:justify-end items-end">
               <button
-                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block"}`}
+                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-1 lg:-mb-1 shadow-lg"}`}
                 onClick={() => {
                   if (years[years.length - 1].split("-")[1] > endYear) return;
                   setYears([...years.slice(1, years.length), `${years[years.length - 1].split("-")[1]}-${parseInt(years[years.length - 1].split("-")[1]) + 1}`])
                 }}
               >
-                <FiChevronRight className="text-[2.5rem] text-gray-500 lg:hover:text-black transition-all ease-in-out" />
+                <BiChevronRight className="text-[2rem] lg:text-[2.5rem] text-white" />
               </button>
             </div>
           </div>
