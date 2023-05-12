@@ -34,7 +34,6 @@ const Landing = () => {
     <main className="w-screen overflow-x-hidden bg-white">
       <Navbar canScrollAdjust />
       <HeroCover
-        image={COVER_IMAGE_URL}
         h1={"Be the Change."}
         h2={details.tagline}
       />
@@ -79,30 +78,37 @@ const Landing = () => {
   );
 };
 
-const HeroCover = ({ image, h1, h2 }) => {
+const HeroCover = ({ h1, h2 }) => {
+  const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImgIndex((index) => (index + 1) % 6);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div
-      className="pt-32 h-[80vh] bg-red-300 p-4 lg:p-8 flex justify-start items-end"
-      style={{
-        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${image}})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="">
+    <div className="relative">
+      <img
+        src={`assets/${imgIndex}.jpg`}
+        alt="cover"
+        className="w-full h-[80vh] object-cover filter brightness-50"
+      />
+      <div className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8">
         <div className="text-5xl lg:text-7xl uppercase font-sans text-transparent font-bold select-none [-webkit-text-stroke-width:1px] lg:[-webkit-text-stroke-width:2px] [-webkit-text-stroke-color:#fff]">
           <p className="">{h1}</p>
         </div>
-        <div className="flex space-x-6 mt-4 w-full">
+        <div className="flex space-x-4 lg:space-x-6 mt-4 w-full">
           <div className="h-full flex items-start">
             <FaQuoteLeft size={32} className="text-white hidden lg:block" />
             <FaQuoteLeft size={24} className="text-white lg:hidden" />
           </div>
-          <div className="flex items-end">
+          <div className="flex items-end pr-4 lg:pr-0">
             <p className="text-white lg:text-lg w-full lg:w-[60%] font-serif">
               {h2}
             </p>
-            <div className="-ml-3">
+            <div className="lg:-ml-3">
               <FaQuoteRight size={32} className="text-white hidden lg:block" />
               <FaQuoteRight size={24} className="text-white lg:hidden" />
             </div>
@@ -122,8 +128,8 @@ const AboutUs = () => {
     });
   }, []);
 
-  const IMAGE =
-    "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=449&q=80";
+  const IMAGE = "/assets/about.jpg";
+
   return (
     <div className="w-full p-8 lg:pr-0 flex items-stretch">
       <div className="w-full lg:w-2/3 lg:mr-8 py-6">
@@ -208,8 +214,8 @@ const IconBackgroundSection = ({ title, icon, body }) => {
     >
       {React.cloneElement(icon, {
         className:
-          "absolute -top-8 -right-8 text-4xl text-emerald-500 opacity-25",
-        size: 196,
+          "absolute -top-0 -right-4 text-4xl text-emerald-500 opacity-25",
+        size: 156,
       })}
       <div className="p-3 rounded-full bg-emerald-800 text-white w-fit shadow-lg ">
         {React.cloneElement(icon, {

@@ -62,13 +62,13 @@ const ClubLanding = () => {
               }
           }
         ></div>
-        <div className="flex flex-col lg:flex-row lg:items-center space-x-6 -mt-16 lg:-mt-48">
+        <div className="flex flex-col lg:flex-row items-center space-x-6 -mt-16 lg:-mt-48">
           <img
-            className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full border-4 lg:border-8 border-gray-200 ml-4 lg:ml-16 object-contain"
+            className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full bg-gray-100 border-4 lg:border-8 border-gray-200 lg:ml-16 object-contain"
             src={generalDetails?.general?.image_url ? generalDetails?.general?.image_url : "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png"}
             alt="club-logo"
           />
-          <div className="pt-4 lg:pt-0 pr-4 lg:pr-0">
+          <div className="pt-4 lg:pt-0 pr-4 lg:pr-0 text-center lg:text-left">
             <p className="lg:text-white font-sans text-2xl lg:text-4xl font-bold">
               {generalDetails ? generalDetails.clubName : "Loading.."}{" "}
             </p>
@@ -88,14 +88,14 @@ const ClubLanding = () => {
           <div className="flex flex-col gap-8 w-full lg:w-1/4">
             <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
               <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
-              <p className="text-base text-gray-500 mt-6">
+              <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
                 {generalDetails?.general?.description ||
                   "No description provided"}
               </p>
               {
                 generalDetails?.general?.website && (
-                  <p className="mt-2 text-base">
-                    <span className="">For More Information: &nbsp;</span>
+                  <p className="mt-2 text-base flex flex-col items-center lg:items-start">
+                    <span className="">For More Information</span>
                     <button className="text-blue-600 hover:underline font-semibold flex items-center space-x-2" onClick={() => {
                       window.open(generalDetails.general.website.startsWith("http") ? generalDetails.general.website : "https://" + generalDetails.general.website)
                     }}

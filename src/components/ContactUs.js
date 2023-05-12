@@ -15,8 +15,8 @@ const ContactUs = ({ homePage = false }) => {
         id="section9"
         className={`w-screen bg-black px-[calc(100vw/16)] pt-16 pb-8 font-poppins ${!homePage && "mt-8"}`}
       >
-        <h1 className="text-[2.75rem] text-white font-semibold pb-6">Contact Us</h1>
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 text-white mt-8">
+        <h1 className="text-[2.75rem] text-white font-semibold pb-6 text-center lg:text-left">Contact Us</h1>
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 text-white mt-4">
           <div className="space-y-6 w-full lg:w-[30%]">
             <button
               className="flex items-center space-x-4 text-gray-300 hover:text-white transition-all ease-in-out duration-300"
