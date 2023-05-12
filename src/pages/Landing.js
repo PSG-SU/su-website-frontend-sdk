@@ -166,14 +166,14 @@ const AboutCollege = () => {
     });
   }, []);
 
-  const IMAGE = "https://www.psgtech.edu/icaars2022/img/speakers/1.jpg";
+  const IMAGE = "https://www.psgtech.edu/images/slider/slider1.jpg";
   return (
     <div className="w-full p-8 lg:pr-0 flex items-stretch">
       <div className="w-full lg:w-2/3 lg:mr-8 py-6">
         <h2 className="text-2xl uppercase font-sans tracking-wider">
           About College
         </h2>
-        <h1 className="text-5xl font-bold uppercase font-sans tracking-wider">
+        <h1 className="text-4xl lg:text-5xl font-bold uppercase font-sans tracking-wider">
           PSG College of Technology
         </h1>
         <div

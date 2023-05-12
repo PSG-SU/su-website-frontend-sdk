@@ -84,10 +84,10 @@ const ClubLanding = () => {
           </div>
         </div>
         {/* <div className="lg:hidden w-full h-0.5 mt-6 bg-gray-500"></div> */}
-        <div className="flex flex-col lg:flex-row w-full items-center lg:items-start gap-8 my-8 px-6 lg:px-0">
+        <div className="flex flex-col lg:flex-row w-full items-center lg:items-start gap-8 my-8">
           <div className="flex flex-col gap-8 w-full lg:w-1/4">
-            <section className="lg:bg-gray-200 rounded-lg lg:p-8">
-              <div className="text-gray-700 text-xl font-bold">About Us</div>
+            <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
+              <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
               <p className="text-base text-gray-500 mt-6">
                 {generalDetails?.general?.description ||
                   "No description provided"}
@@ -112,12 +112,14 @@ const ClubLanding = () => {
             </div>
 
           </div>
-          <div className="flex flex-col gap-8 w-full lg:w-1/2">
+          <div className="flex flex-col gap-8 w-full lg:w-1/2 items-center">
+            <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-2 border-t-4 border-t-gray-400">Posts</div>
             <Feed id={id} />
           </div>
-          <div className="flex flex-col gap-8 w-full lg:w-1/4">
-            <section className="lg:bg-gray-200 rounded-lg lg:p-8">
-              <p className="text-xl text-gray-700 font-bold">Photos</p>
+          <div className="flex flex-col gap-8 w-full lg:w-1/4 items-center lg:items-start">
+            <p className="lg:hidden text-xl text-gray-700 font-bold pt-2 -mb-4 border-t-4 border-t-gray-400">Photos</p>
+            <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
+              <p className="hidden lg:block text-xl text-gray-700 font-bold">Photos</p>
               <div className="grid grid-cols-3 gap-1 mt-6">
                 {photos.map((p, idx) => (
                   <div
@@ -132,7 +134,7 @@ const ClubLanding = () => {
                 ))}
               </div>
             </section>
-            <div className="lg:hidden">
+            <div className="lg:hidden w-full">
               <Contact generalDetails={generalDetails} />
             </div>
           </div>
@@ -155,12 +157,12 @@ const Contact = ({ generalDetails }) => {
     <div>
       {
         generalDetails?.general?.contactName1 && generalDetails?.general?.contactNumber1 && generalDetails?.general?.contactEmail1 && (
-          <div className="lg:bg-gray-200 flex-1 flex flex-col rounded-lg px-2 lg:p-8 space-y-6">
-            <p className="text-xl font-bold text-gray-700">
+          <div className="lg:bg-gray-200 flex-1 flex flex-col rounded-lg px-6 lg:p-8 space-y-6 items-center lg:items-start">
+            <p className="text-xl font-bold text-gray-700 border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">
               Contact Us
             </p>
 
-            <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row items-center justify-between w-full">
               <div className="w-1/2">
                 <p className="font-semibold text-[#3c4043]">
                   {toTitleCase(generalDetails.general.contactName1)}
@@ -205,7 +207,7 @@ const Contact = ({ generalDetails }) => {
 
             {
               generalDetails?.general?.contactName2 && generalDetails?.general?.contactNumber2 && generalDetails?.general?.contactEmail2 && (
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-between w-full">
                   <div className="w-1/2">
                     <p className="font-semibold text-[#3c4043]">
                       {toTitleCase(generalDetails.general.contactName2)}

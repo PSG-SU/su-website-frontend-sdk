@@ -72,17 +72,17 @@ const Feed = ({ id = "all" }) => {
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   return (
-    <div className='font-sans overflow-x-hidden space-y-6'>
+    <div className='font-sans overflow-x-hidden space-y-6 flex flex-col w-full items-center'>
       {event && event.length > 0 ?
         event.slice(0).reverse().map((ev, index) => {
           const dateTime = new Date(ev.startDate);
 
           return (
-            <section className="w-full border-gray-400 border-2 rounded-lg"
+            <section className="w-full border-t-2 border-gray-400 lg:border-2 lg:rounded-lg"
               id={ev.eventName}
               key={ev.eventName}
             >
-              <div className="p-6 border-b-gray-400 border-b-2">
+              <div className="p-6 border-b-gray-400 lg:border-b-2">
                 <header className="flex items-center space-x-4">
                   <button className="rounded-full w-10 h-10 aspect-square" onClick={(e) => { navigate(`/club/${ev.user}`) }}
                     style={{
@@ -103,40 +103,24 @@ const Feed = ({ id = "all" }) => {
                     </div>
                   </button>
                 </header>
-                <div className='flex flex-col-reverse lg:flex-row items-center space-y-2 lg:space-y-0 justify-around my-6 font-poppins text-lg text-gray-700 font-semibold'>
-                  <div className="flex items-center space-x-2 lg:space-x-4 pt-4 lg:pt-0">
-                    <IoLocationSharp size={24} />
-                    <p className="">{ev.venue}</p>
-                  </div>
-                  <div className="hidden lg:flex items-center space-x-4">
-                    <BsCalendar size={24} />
+                <div className='flex flex-row items-center justify-between lg:justify-around my-6 font-poppins lg:text-lg text-gray-700 font-semibold pt-2 lg:pt-0'>
+                  <div className="flex items-center space-x-2 lg:space-x-4">
+                    <BsCalendar className='text-lg lg:text-2xl' />
                     <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
                   </div>
-                  <div className="hidden lg:flex items-center space-x-4">
-                    <MdAccessTime size={24} />
+                  <div className="flex items-center space-x-2 lg:space-x-4">
+                    <MdAccessTime className='text-lg lg:text-2xl' />
                     <p className="">
                       {(dateTime.getHours() < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) <= 12 ?
                         dateTime.getHours() :
                         ((parseInt(dateTime.getHours().toString()) - 12 < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) - 12)))}
-                      {' '}: {(dateTime.getMinutes() < 10 && '0') + dateTime.getMinutes()}
+                      :{(dateTime.getMinutes() < 10 && '0') + dateTime.getMinutes()}
                       {dateTime.getHours() < 12 ? " AM" : " PM"}
                     </p>
                   </div>
-                  <div className='lg:hidden flex flex-row justify-between px-1 w-full'>
-                    <div className="flex items-center space-x-2">
-                      <BsCalendar size={24} />
-                      <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MdAccessTime size={24} />
-                      <p className="">
-                        {(dateTime.getHours() < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) <= 12 ?
-                          dateTime.getHours() :
-                          ((parseInt(dateTime.getHours().toString()) - 12 < 10 ? '0' : '') + (parseInt(dateTime.getHours().toString()) - 12)))}
-                        {' '}: {(dateTime.getMinutes() < 10 && '0') + dateTime.getMinutes()}
-                        {dateTime.getHours() < 12 ? " AM" : " PM"}
-                      </p>
-                    </div>
+                  <div className="flex items-center space-x-2 lg:space-x-4">
+                    <IoLocationSharp className='text-lg lg:text-2xl' />
+                    <p className="">{ev.venue}</p>
                   </div>
                 </div>
                 <p className="mt-4">{ev.description}</p>
@@ -182,7 +166,7 @@ const Feed = ({ id = "all" }) => {
                           }
                         }}
                       >
-                        <BsChevronLeft className="font-bold text-3xl group-hover:text-4xl transition-all ease-in-out duration-300" />
+                        <BsChevronLeft className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
                       </button>
 
                       <div>
@@ -209,12 +193,12 @@ const Feed = ({ id = "all" }) => {
                           }
                         }}
                       >
-                        <BsChevronRight className="font-bold text-3xl group-hover:text-4xl transition-all ease-in-out duration-300" />
+                        <BsChevronRight className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
                       </button>
                     </div>
                   </div>
                 )}
-              <div className="w-full flex flex-col lg:flex-row p-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
+              <div className="w-full flex flex-col lg:flex-row p-6 px-12 lg:px-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
                 <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
                   onClick={() => {
                     window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
@@ -249,7 +233,7 @@ const Feed = ({ id = "all" }) => {
         })
         : (
           loading ? (
-            <section className="w-full border-gray-200 border-2 rounded-lg">
+            <section className="w-full border-gray-200 border-2 lg:rounded-lg">
               <div className="p-6 border-b-gray-200 border-b-2 bg-gray-200">
                 <header className="flex items-center space-x-4">
                   <div className="rounded-full w-10 h-10 aspect-square" id="skeleton"></div>
@@ -278,14 +262,14 @@ const Feed = ({ id = "all" }) => {
                   }
                 </div>
               </div>
-              <div className="w-full flex p-6 space-x-4 bg-gray-200">
-                <div className='w-1/2 h-12 rounded-lg' id="skeleton"></div>
-                <div className='w-1/2 h-12 rounded-lg' id="skeleton"></div>
+              <div className="w-full flex flex-col lg:flex-row p-6 px-12 lg:px-6 space-y-4 lg:space-y-0 lg:space-x-4 bg-gray-200">
+                <div className='w-full lg:w-1/2 h-12 rounded-lg' id="skeleton"></div>
+                <div className='w-full lg:w-1/2 h-12 rounded-lg' id="skeleton"></div>
               </div>
             </section>
           ) : (
-            <section className="hidden lg:flex bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-full space-x-4 justify-center items-center">
-              <FiAlertCircle size={26} />
+            <section className="flex bg-gray-200 text-gray-600 border-2 border-dashed border-gray-400 rounded-lg p-8 w-[90%] lg:w-full space-x-4 justify-center items-center">
+              <FiAlertCircle className='text-6xl lg:text-2xl' />
               <p className="">
                 Uh oh! Looks like there are no events to show here. Please check
                 back later.

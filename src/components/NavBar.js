@@ -27,7 +27,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
         className={`flex justify-between items-center  w-full ${
           onTop
             ? "p-4 lg:p-8 bg-gradient-to-b from-[rgba(0,0,0,0.7)] to-[rgba(0,0,0,0.5)]"
-            : "p-4 bg-gradient-to-b from-[rgba(0,0,0,1)] to-[rgba(0,0,0,1)]"
+            : "p-3 lg:p-4 bg-gradient-to-b from-[rgba(0,0,0,1)] to-[rgba(0,0,0,1)]"
         } transition-all `}
       >
         <button className="flex items-center space-x-4"
@@ -45,7 +45,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
             <h1
               className={`${
                 onTop ? "text-xl lg:text-3xl" : "text-xl"
-              } font-poppins font-[500] text-white`}
+              } font-poppins font-[500] text-white text-left`}
             >
               Students Union
             </h1>
