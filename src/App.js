@@ -10,6 +10,7 @@ import "./styles/tailwind.output.css";
 import SUFeed from "./pages/SUFeed";
 import ByLaw from "./pages/ByLaw";
 import { Toaster } from "react-hot-toast";
+import SchemesWings from "./pages/SchemesWings";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="feed" element={<SUFeed />} />
           <Route path="clubs" element={<Clubs />} />
           <Route path="associations" element={<Associations />} />
+          <Route path="schemes-and-wings" element={<SchemesWings />} />
           <Route path="by-law" element={<ByLaw />} />
           <Route index element={<Landing />} />
         </Routes>

@@ -91,7 +91,7 @@ const HeroCover = ({ h1, h2 }) => {
   return (
     <div className="relative">
       <img
-        src={`assets/${imgIndex}.jpg`}
+        src={`assets/Landing/${imgIndex}.jpg`}
         alt="cover"
         className="w-full h-[80vh] object-cover filter brightness-50"
       />
@@ -128,7 +128,7 @@ const AboutUs = () => {
     });
   }, []);
 
-  const IMAGE = "/assets/about.jpg";
+  const IMAGE = "/assets/Landing/about.jpg";
 
   return (
     <div className="w-full p-8 lg:pr-0 flex items-stretch">

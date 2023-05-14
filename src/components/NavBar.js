@@ -62,6 +62,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
           <NavItem text="SU By Law" to="/by-law" />
           <NavItem text="Clubs" to="/clubs" />
           <NavItem text="Associations" to="/associations" />
+          <NavItem text="Schemes & Wings" to="/schemes-and-wings" />
           <NavItem text="SU Feed" to="/feed" />
           <NavItem text="Gallery" to="/gallery" />
           <NavItem text="Our Team" to="/team"/>
