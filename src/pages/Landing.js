@@ -6,11 +6,11 @@ import { BsTrophy } from "react-icons/bs";
 import { BiLink } from "react-icons/bi";
 import ContactUs from "../components/ContactUs.js";
 import { ANNOUNCEMENT_URL, ABOUT_URL, CLUB_URL } from "../API/config";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const COVER_IMAGE_URL =
-  "https://images.unsplash.com/photo-1665780993894-ceb3a89bc5c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80";
+// const COVER_IMAGE_URL =
+//   "https://images.unsplash.com/photo-1665780993894-ceb3a89bc5c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80";
 
 const Landing = () => {
   const [details, setDetails] = useState({});
@@ -233,7 +233,7 @@ const IconBackgroundSection = ({ title, icon, body }) => {
 
 const StatSection = ({ stats }) => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 lg:gap-x-0 lg:gap-y-8 px-8">
+    <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 lg:gap-x-0 lg:gap-y-8 px-8 pt-4">
       {stats.map((stat, index) => (
         <div className="text-white flex flex-col items-center space-y-1">
           <h1 className="text-6xl font-sans font-bold">{stat.num}</h1>
@@ -246,6 +246,7 @@ const StatSection = ({ stats }) => {
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
+  const [expanded, setExpanded] = useState([]);
 
   const sendrequest = async () => {
     const res = await axios.get(`${ANNOUNCEMENT_URL}`).catch((err) => console.log(err));
@@ -257,29 +258,9 @@ const Announcements = () => {
     sendrequest().then((data) => setAnnouncements(data));
   }, []);
 
-  // const dummyAnnouncements = [
-  //   {
-  //     type: "Event",
-  //     title: "ICAARS 2022",
-  //     date: "21st - 23rd January 2022",
-  //     body: "The First and Second International Conference on Advancements in Automation, Robotics and Sensing was hosted in Coimbatore, India by the Department of Robotics and Automation Engineering, PSG College of Technology",
-  //     link: "https://www.psgtech.edu/icaars2022/",
-  //   },
-  //   {
-  //     type: "Event",
-  //     title: "INTRAMS 2022",
-  //     date: "21st - 23rd January 2022",
-  //     body: "Cultural events are events designed for entertainment and enjoyment of a more or less wide audience.",
-  //     link: "https://www.psgtech.edu/intrams2022/",
-  //   },
-  //   {
-  //     type: "Classified",
-  //     title: "Need volunteers for Republic Day",
-  //     date: "25th January 2022",
-  //     body: "Volunteers are needed for Republic Day celebrations at PSG College of Technology",
-  //     link: "https://www.psgtech.edu/",
-  //   },
-  // ];
+  useEffect(() => {
+    setExpanded(announcements.map(() => false));
+  }, [announcements]);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -288,27 +269,51 @@ const Announcements = () => {
         <div className="w-[70%] h-[1px] mt-1 bg-white"></div>
       </div>
       <div className="flex flex-col space-y-6 w-full py-4 h-[650px] overflow-y-auto">
-        {announcements.map((announcements, index) => (
+        {announcements.map((announcement, index) => (
           <div className="px-8">
-            <p className="text-sm text-gray-300 italic ">{announcements.type}</p>
-            <div className="flex w-full">
+            <p className="text-sm text-gray-300 italic ">{announcement.type}</p>
+            <div className="flex w-full justify-between">
               <h1 className=" text-white font-bold font-sans w-2/3">
-                {announcements.title}
+                {announcement.title}
               </h1>
               <p className="text-xs text-gray-300 text-right whitespace-nowrap">
-                {announcements.date}
+                {announcement.date}
               </p>
             </div>
-            <div className="flex w-full mt-1">
-              <p className="text-xs text-gray-100 text-ellipsis [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box] overflow-hidden">
-                {announcements.body}
-              </p>
-              <a href={announcements.link}>
-                <BiLink
-                  size={24}
-                  className="ml-4 text-white hover:text-gray-400"
-                />
-              </a>
+            <div className="flex w-full mt-1 justify-between items-center">
+              <div className="">
+                <p
+                  id={`${index}-body`}
+                  className={`text-xs text-gray-100 text-ellipsis ${!expanded[index] && "h-8 [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box]"} overflow-hidden`}>
+                  {announcement.body}
+                </p>
+                {
+                  (!expanded[index]) &&
+                  (document.getElementById(`${index}-body`)?.scrollHeight > document.getElementById(`${index}-body`)?.clientHeight) &&
+                  (
+                    <button className="text-xs text-gray-100 font-semibold hover:underline"
+                      onClick={() => {
+                        setExpanded((prev) => {
+                          const newExpanded = [...prev];
+                          newExpanded[index] = !newExpanded[index];
+                          return newExpanded;
+                        });
+                      }}
+                    >
+                      Read More
+                    </button>
+                  )}
+              </div>
+              {announcement.link ? (
+                <a href={announcement.link.startsWith("http") ? announcement.link : "https://" + announcement.link} target="_blank" rel="noopener noreferrer" >
+                  <BiLink
+                    size={24}
+                    className="ml-4 text-white hover:text-gray-400"
+                  />
+                </a>
+              ) : (
+                <div className="pl-8" />
+              )}
             </div>
           </div>
         ))}
