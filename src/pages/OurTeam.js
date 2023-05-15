@@ -68,17 +68,22 @@ const OurTeam = () => {
           setChair(element);
         } else if (element.role === "Co-Chairperson") {
           setCoChair(element);
-        } else if (element.role === "Secretary(Male)") {
+        } else if (element.role === "Secretary (Male)") {
           setSecremale(element);
-        } else if (element.role === "Secretary(Female)") {
+        } else if (element.role === "Secretary (Female)") {
           setSecrefemale(element);
         } else if (
-          element.role === "Secretary(Science)" ||
+          element.role === "Secretary (Science)" ||
           element.role === "Associate Chairperson"
         ) {
           setSecreScie(element);
         }
       }
+
+      if (yearButton.length === 4) {
+        setSecreScie({});
+      }
+
     }
   }, [yearButton]);
 
@@ -325,10 +330,10 @@ const OurTeam = () => {
           <div className="font-bold text-3xl text-center">
             Office Bearers of the Students Union
           </div>
-          <div className="flex flex-row justify-between items-end">
-            <div className="w-10 lg:w-20 flex items-end justify-end lg:justify-start">
+          <div className="flex flex-row justify-between items-center mt-6">
+            <div className="w-10 lg:w-20">
               <button
-                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-1 lg:-mb-1 shadow-lg"}`}
+                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
                   if (years[0].split("-")[0] - 1 < startYear) return;
                   setYears([`${years[0].split("-")[0] - 1}-${years[0].split("-")[0]}`, ...years.slice(0, years.length - 1)])
@@ -337,11 +342,11 @@ const OurTeam = () => {
                 <BiChevronLeft className="text-[2rem] lg:text-[2.5rem] text-white" />
               </button>
             </div>
-            <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 justify-center mt-4 text-center">
+            <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 justify-center text-center">
               {years.map((year) => (
                 <button
                   className={`rounded-2xl ${year === clickedYear ? "bg-black" : "bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out"
-                    } text-white px-4 py-2 mt-2`}
+                    } text-white px-4 py-2`}
                   onClick={() => {
                     console.log(year);
                     console.log(team[year]);
@@ -353,9 +358,9 @@ const OurTeam = () => {
                 </button>
               ))}
             </div>
-            <div className="w-10 lg:w-20 flex justify-start lg:justify-end items-end">
+            <div className="w-10 lg:w-20 flex justify-end">
               <button
-                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-1 lg:-mb-1 shadow-lg"}`}
+                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
                   if (years[years.length - 1].split("-")[1] > endYear) return;
                   setYears([...years.slice(1, years.length), `${years[years.length - 1].split("-")[1]}-${parseInt(years[years.length - 1].split("-")[1]) + 1}`])
@@ -371,7 +376,6 @@ const OurTeam = () => {
               image={chair.image_url}
               role1={chair.role}
               role2={chair.deptyos}
-              nowrap
               ob
             />
             <Person
@@ -398,13 +402,16 @@ const OurTeam = () => {
               nowrap
               ob
             />
-            <Person
-              name={SecreScie.name}
-              image={SecreScie.image_url}
-              role1={SecreScie.role}
-              role2={SecreScie.deptyos}
-              ob
-            />
+            {SecreScie?.name && (
+              <Person
+                name={SecreScie.name}
+                image={SecreScie.image_url}
+                role1={SecreScie.role}
+                role2={SecreScie.deptyos}
+                {...(SecreScie.role === "Secretary (Science)" && { nowrap: true })}
+                ob
+              />
+            )}
           </div>
         </div>
       </div>

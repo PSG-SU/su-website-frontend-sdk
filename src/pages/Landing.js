@@ -268,10 +268,10 @@ const Announcements = () => {
         <h1 className="text-2xl font-serif text-white">Announcements</h1>
         <div className="w-[70%] h-[1px] mt-1 bg-white"></div>
       </div>
-      <div className="flex flex-col space-y-6 w-full py-4 h-[650px] overflow-y-auto">
+      <div className="flex flex-col space-y-4 w-full py-4 h-[650px] overflow-y-auto">
         {announcements.map((announcement, index) => (
           <div className="px-8">
-            <p className="text-sm text-gray-300 italic ">{announcement.type}</p>
+            <p className="text-sm text-gray-300 italic">{announcement.type}</p>
             <div className="flex w-full justify-between">
               <h1 className=" text-white font-bold font-sans w-2/3">
                 {announcement.title}
@@ -280,11 +280,11 @@ const Announcements = () => {
                 {announcement.date}
               </p>
             </div>
-            <div className="flex w-full mt-1 justify-between items-center">
+            <div className="flex w-full mt-1 justify-between items-center border-b-2 border-[#464495] pb-3">
               <div className="">
                 <p
                   id={`${index}-body`}
-                  className={`text-xs text-gray-100 text-ellipsis ${!expanded[index] && "h-8 [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box]"} overflow-hidden`}>
+                  className={`text-xs text-gray-100 text-ellipsis ${!expanded[index] && "max-h-8 [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box]"} overflow-hidden`}>
                   {announcement.body}
                 </p>
                 {

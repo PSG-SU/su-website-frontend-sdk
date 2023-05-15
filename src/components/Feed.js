@@ -78,7 +78,7 @@ const Feed = ({ id = "all" }) => {
           const dateTime = new Date(ev.startDate);
 
           return (
-            <section className="w-full border-t-2 border-gray-400 lg:border-2 lg:rounded-lg"
+            <section className={`w-full ${index !== 0 && "border-t-2"} border-gray-400 lg:border-2 lg:rounded-lg`}
               id={ev.eventName}
               key={ev.eventName}
             >
