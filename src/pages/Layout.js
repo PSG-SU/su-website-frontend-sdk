@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
   return (
     <div className="w-screen overflow-x-hidden">
       <Navbar />
-      <div className="pt-16 min-h-[calc(100vh-8rem)] lg:px-[calc(100vw/16)] bg-gray-50">
+      <div className="pt-16 min-h-[calc(100vh-8rem)] lg:px-[calc(100vw/18)] bg-gray-50">
         {children}
       </div>
       <ContactUs />
