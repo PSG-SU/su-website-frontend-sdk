@@ -71,10 +71,29 @@ const Feed = ({ id = "all" }) => {
 
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+  const calculateTimeDiff = (date) => {
+    const publishDate = new Date(date);
+    const now = new Date();
+    const diff = now.getTime() - publishDate.getTime();
+    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diff / (1000 * 60 * 60));
+    const diffMinutes = Math.floor(diff / (1000 * 60));
+
+    if (diffDays > 0) {
+      return diffDays === 1 ? "1 day ago" : diffDays + " days ago";
+    } else if (diffHours > 0) {
+      return diffHours === 1 ? "1 hour ago" : diffHours + " hours ago";
+    } else if (diffMinutes > 0) {
+      return diffMinutes === 1 ? "1 minute ago" : diffMinutes + " minutes ago";
+    } else {
+      return "Just now";
+    }
+  }
+
   return (
     <div className='font-sans overflow-x-hidden space-y-6 flex flex-col w-full items-center'>
       {event && event.length > 0 ?
-        event.slice(0).reverse().map((ev, index) => {
+        event.map((ev, index) => {
           const dateTime = new Date(ev.startDate);
 
           return (
@@ -93,10 +112,9 @@ const Feed = ({ id = "all" }) => {
                     }}
                   ></button>
                   <button className="" onClick={(e) => { navigate(`/club/${ev.user}`) }}>
-                    <div className="flex items-center space-x-1">
-                      <p className="text-lg font-semibold">{ev.eventName}</p>
-                      {/* <p className="">:</p>
-                  <p className=" text-gray-500">1d</p> */}
+                    <div className="flex items-end space-x-1">
+                      <p className="text-lg font-semibold text-left">{ev.eventName}</p>
+                      <p className="text-xs mb-1 pl-2 text-gray-500 text-right">{calculateTimeDiff(ev.publishedAt)}</p>
                     </div>
                     <div className="text-base text-gray-500 text-left">
                       {clubs.filter((club) => club.clubId === ev.user)[0]?.clubName}
@@ -199,14 +217,16 @@ const Feed = ({ id = "all" }) => {
                   </div>
                 )}
               <div className="w-full flex flex-col lg:flex-row p-6 px-12 lg:px-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
-                <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
-                  onClick={() => {
-                    window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
-                  }}
-                >
-                  <FiUserPlus className="inline-block mr-3 mb-1 text-xl" />
-                  Register
-                </button>
+                {ev.registrationLink && (
+                  <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
+                    onClick={() => {
+                      window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
+                    }}
+                  >
+                    <FiUserPlus className="inline-block mr-3 mb-1 text-xl" />
+                    Register
+                  </button>
+                )}
 
                 <button className="flex-1 border-2 border-emerald-600 hover:border-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-emerald-600 hover:text-emerald-800 font-semibold"
                   onClick={() => {
