@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Layout from "./Layout";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -15,12 +15,15 @@ const ClubLanding = () => {
 
   const [photos, setPhotos] = useState([]);
   const [details, setDetails] = useState(null);
+  const [aboutHeight, setAboutHeight] = useState(0);
+  const [sticky, setSticky] = useState(false);
 
   useEffect(() => {
     toast.promise(fetchClubGeneralDetails(id), {
       loading: "Loading...",
       success: (res) => {
         setDetails(res.data);
+        setAboutHeight(document.getElementById("about")?.clientHeight);
         return "Successfully loaded!";
       },
       error: (err) => {
@@ -42,6 +45,35 @@ const ClubLanding = () => {
       });
   }, []);
 
+  useLayoutEffect(() => {
+    function updateSize() {
+      const height = document.getElementById("about")?.clientHeight;
+      setAboutHeight(height);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      const y = document.getElementById("feed").getBoundingClientRect().top;
+
+      if (y <= 85) {
+        setSticky(true);
+        const feedDiv = document.getElementById("feed");
+        if (feedDiv) { feedDiv.style.maxHeight = `${aboutHeight}px`; }
+      } else {
+        setSticky(false);
+        const feedDiv = document.getElementById("feed");
+        if (feedDiv) { feedDiv.style.maxHeight = `none`; }
+      }
+    }
+    window.addEventListener("scroll", updateSize);
+    updateSize();
+    return () => window.removeEventListener("scroll", updateSize);
+  }, [aboutHeight]);
+
   return (
     <Layout>
       <div className="w-full">
@@ -60,24 +92,24 @@ const ClubLanding = () => {
               }
           }
         ></div>
-        <div className="flex flex-col lg:flex-row items-center space-x-6 -mt-16 lg:-mt-48">
+        <div className="flex flex-col lg:flex-row items-center space-x-6 -mt-12 lg:-mt-36">
           <img
             className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full bg-gray-100 border-4 lg:border-8 border-gray-200 lg:ml-16 object-contain"
             src={details?.general?.image_url ? details?.general?.image_url : "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png"}
             alt="club-logo"
           />
-          <div className="pt-4 lg:pt-0 pr-4 lg:pr-0 text-center lg:text-left">
-            <p className="lg:text-white font-sans text-2xl lg:text-4xl font-bold">
+          <div className="pt-4 lg:pt-36 pr-4 lg:pr-0 text-center lg:text-left">
+            <p className="text-gray-800 font-sans text-2xl lg:text-4xl font-bold">
               {details ? details.clubName : "Loading.."}{" "}
             </p>
-            <p className="text-gray-600 lg:text-gray-200 pt-1">
+            <p className="text-gray-600 pt-1">
               {details?.general?.tagline && details.general.tagline !== "No tagline provided" && details.general.tagline}
               {details?.general?.website &&
-                <button className="inline-block"
+                <button className="sm:inline-block pl-2 sm:pl-0"
                   onClick={() => { window.open(details.general.website.startsWith("http") ? details.general.website : "https://" + details.general.website) }}
                 >
-                  {details?.general?.tagline && details.general.tagline !== "No tagline provided" && <p className="inline-block mx-2">{' | '}</p>}
-                  <p className="inline-block font-semibold hover:underline hover:text-blue-300">{details.general.website}</p>
+                  {details?.general?.tagline && details.general.tagline !== "No tagline provided" && <p className="hidden sm:inline-block mx-2">{' | '}</p>}
+                  <p className="sm:inline-block font-semibold hover:underline hover:text-blue-600">{details.general.website}</p>
                 </button>
               }</p>
           </div>
@@ -85,7 +117,7 @@ const ClubLanding = () => {
         {/* <div className="lg:hidden w-full h-0.5 mt-6 bg-gray-500"></div> */}
 
         <div className="flex flex-col lg:flex-row w-full items-center lg:items-start gap-8 my-8">
-          <div className="flex flex-col gap-8 w-full lg:w-1/4">
+          <div className={`flex flex-col gap-8 w-full lg:w-1/4`} id='about'>
             <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
               <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
               <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
@@ -112,9 +144,14 @@ const ClubLanding = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 w-full lg:w-1/2 items-center">
+          <div className={`flex flex-col gap-8 w-full lg:w-1/2 items-center overflow-auto`}
+            // style={{ maxHeight: aboutHeight, minHeight: "800px" }}
+            id='feed'
+          >
             <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-2 border-t-4 border-t-gray-400">Posts</div>
+            {/* <div className={`w-full ${sticky ? "fixed" : ""}`}> */}
             <Feed id={id} />
+            {/* </div> */}
           </div>
 
           <div className="flex flex-col gap-8 w-full lg:w-1/4 items-center lg:items-start">
@@ -140,6 +177,20 @@ const ClubLanding = () => {
               <Contact generalDetails={details} />
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-row gap-8 ">
+        <div className="w-1/2">
+          <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
+            <p className="text-xl text-gray-700 font-bold">Faculty Advisors</p>
+          </section>
+        </div>
+
+        <div className="w-1/2">
+          <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
+            <p className="text-xl text-gray-700 font-bold">Our Team</p>
+          </section>
         </div>
       </div>
     </Layout>
@@ -238,7 +289,7 @@ const Person = ({ name, phone, email }) => {
         </p>
       </div>
 
-      <div className="pt-4 space-x-4">
+      <div className={`${name.length > 18 ? "pt-6" : "pt-4"} space-x-4`}>
         {phone && (<Social
           link={`tel:${phone.split(" ").join("")}`}
           icon={<IoMdCall />}
