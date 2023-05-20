@@ -265,7 +265,7 @@ const ClubLanding = () => {
                 <BiChevronLeft className="text-[2rem] lg:text-[2.5rem] text-white" />
               </button>
 
-              <div className="flex flex-row overflow-auto gap-4 lg:px-8 no-scrollbar" id='team'>
+              <div className="flex flex-row overflow-auto gap-2 lg:px-4 no-scrollbar" id='team'>
                 {faculty.length > 0 && faculty.slice(0).reverse().map((f) => (
                   <Person
                     name={f.name}
@@ -403,7 +403,7 @@ const ContactPerson = ({ name, phone, email }) => {
         </p>
       </div>
 
-      <div className={`${name.length > 18 ? "pt-6" : "pt-4"} space-x-4`}>
+      <div className={`${name.length > 18 ? "pt-6" : "pt-2"} space-x-4`}>
         {phone && (<Social
           link={`tel:${phone.split(" ").join("")}`}
           icon={<IoMdCall />}
