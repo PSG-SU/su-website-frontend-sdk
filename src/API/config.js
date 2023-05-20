@@ -16,3 +16,5 @@ export const CLUB_GENERAL_URL = `${API_URL}/club/general`;
 export const CLUB_URL = `${API_URL}/clubs`;
 
 export const NSS_NCC_URL = `${API_URL}/nssncc`;
+
+export const CLUB_TEAM_URL = `${API_URL}/club/team-member`;

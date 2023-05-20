@@ -2,21 +2,26 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import Layout from "./Layout";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { fetchClubGeneralDetails } from "../API/calls";
+import { fetchClubGeneralDetails, fetchClubTeam } from "../API/calls";
 import { useParams } from "react-router-dom";
 import { AiOutlineLink } from "react-icons/ai";
 import { IoLogoInstagram, IoLogoWhatsapp, IoMail, IoLogoLinkedin, IoLogoYoutube, IoLogoFacebook, IoLogoTwitter } from "react-icons/io5";
 import { IoMdCall } from "react-icons/io";
 import { Icon } from '@iconify/react';
 import Feed from "../components/Feed";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const ClubLanding = () => {
   const { id } = useParams();
 
   const [photos, setPhotos] = useState([]);
   const [details, setDetails] = useState(null);
+  const [faculty, setFaculty] = useState([]);
+  const [team, setTeam] = useState([]);
+
   const [aboutHeight, setAboutHeight] = useState(0);
   const [sticky, setSticky] = useState(false);
+  const [teamDivPos, setTeamDivPos] = useState("left")
 
   useEffect(() => {
     toast.promise(fetchClubGeneralDetails(id), {
@@ -30,6 +35,13 @@ const ClubLanding = () => {
         console.log(err);
         return "Error loading";
       },
+    });
+  }, [id]);
+
+  useEffect(() => {
+    fetchClubTeam(id).then((res) => {
+      setFaculty(res.data.filter((e) => e.position === "Faculty Advisor"));
+      setTeam(res.data.filter((e) => e.position === "Student"));
     });
   }, [id]);
 
@@ -59,20 +71,43 @@ const ClubLanding = () => {
     function updateSize() {
       const y = document.getElementById("feed").getBoundingClientRect().top;
 
-      if (y <= 85) {
-        setSticky(true);
-        const feedDiv = document.getElementById("feed");
-        if (feedDiv) { feedDiv.style.maxHeight = `${aboutHeight}px`; }
-      } else {
-        setSticky(false);
-        const feedDiv = document.getElementById("feed");
-        if (feedDiv) { feedDiv.style.maxHeight = `none`; }
+      if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        if (y <= 85) {
+          setSticky(true);
+          const feedDiv = document.getElementById("feed");
+          if (feedDiv) {
+            feedDiv.style.maxHeight = `${aboutHeight}px`;
+            feedDiv.style.minHeight = `800px`;
+          }
+        } else {
+          setSticky(false);
+          const feedDiv = document.getElementById("feed");
+          if (feedDiv) { feedDiv.style.maxHeight = `none`; }
+        }
       }
     }
     window.addEventListener("scroll", updateSize);
     updateSize();
     return () => window.removeEventListener("scroll", updateSize);
   }, [aboutHeight]);
+
+  useEffect(() => {
+    const teamDiv = document.getElementById("team");
+    if (teamDiv) {
+      teamDiv.addEventListener('scroll', () => {
+        const scrollLeft = teamDiv.scrollLeft;
+        const scrollWidth = teamDiv.scrollWidth;
+        const clientWidth = teamDiv.clientWidth;
+        if (scrollLeft === 0) {
+          setTeamDivPos("left");
+        } else if (scrollLeft === scrollWidth - clientWidth) {
+          setTeamDivPos("right");
+        } else {
+          setTeamDivPos("middle");
+        }
+      });
+    }
+  }, [team, faculty]);
 
   return (
     <Layout>
@@ -144,9 +179,8 @@ const ClubLanding = () => {
             </div>
           </div>
 
-          <div className={`flex flex-col gap-8 w-full lg:w-1/2 items-center overflow-auto`}
-            // style={{ maxHeight: aboutHeight, minHeight: "800px" }}
-            id='feed'
+          <div className={`flex flex-col gap-8 w-full lg:w-1/2 items-center lg:overflow-auto`} id='feed'
+          // style={{ maxHeight: aboutHeight, minHeight: "800px" }}
           >
             <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-2 border-t-4 border-t-gray-400">Posts</div>
             {/* <div className={`w-full ${sticky ? "fixed" : ""}`}> */}
@@ -180,19 +214,70 @@ const ClubLanding = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-row gap-8 ">
-        <div className="w-1/2">
-          <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
-            <p className="text-xl text-gray-700 font-bold">Faculty Advisors</p>
-          </section>
-        </div>
+      {(faculty.length > 0 || team.length > 0) && (
+        <div className="w-full flex flex-col items-center pt-8 lg:pt-0">
+          <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-8 w-fit border-t-4 border-t-gray-400">Our Team</div>
+          <section className="lg:bg-gray-200 rounded-xl py-8 w-full">
+            <p className="hidden lg:block text-xl text-gray-700 font-bold text-center">Our Team</p>
+            <div className="flex flex-row gap-6 items-center justify-center relative" id="teamBig">
+              <button
+                className={`${(teamDivPos === "left") ?
+                  "hidden" : "hidden lg:block absolute -left-5 bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
+                onClick={() => {
+                  const teamDiv = document.getElementById("team");
+                  if (teamDiv) {
+                    teamDiv.scrollBy({
+                      left: -200,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+              >
+                <BiChevronLeft className="text-[2rem] lg:text-[2.5rem] text-white" />
+              </button>
 
-        <div className="w-1/2">
-          <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
-            <p className="text-xl text-gray-700 font-bold">Our Team</p>
+              <div className="flex flex-row overflow-auto gap-4 lg:px-8 no-scrollbar" id='team'>
+                {faculty.length > 0 && faculty.slice(0).reverse().map((f) => (
+                  <Person
+                    name={f.name}
+                    role1={f.position}
+                    image={f.image_url}
+                    role2={f.department}
+                    year={f.designation}
+                  />
+                ))}
+                {team.length > 0 && team.slice(0).reverse().map((t) => (
+                  <Person
+                    name={t.name}
+                    role1={t.designation}
+                    image={t.image_url}
+                    role2={t.department}
+                    year={t.year}
+                    from={new Date(t.from).getFullYear()}
+                    to={new Date(t.to).getFullYear()}
+                  />
+                ))}
+              </div>
+
+              <button
+                className={`${(teamDivPos === "right" || document.getElementById('team')?.clientWidth < document.getElementById('teamBig')?.clientWidth) ?
+                  "hidden" : "hidden lg:block absolute -right-5 bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg h-fit"}`}
+                onClick={() => {
+                  const teamDiv = document.getElementById("team");
+                  if (teamDiv) {
+                    teamDiv.scrollBy({
+                      left: 200,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+              >
+                <BiChevronRight className="text-[2rem] lg:text-[2.5rem] text-white" />
+              </button>
+            </div>
           </section>
         </div>
-      </div>
+      )}
     </Layout>
   );
 };
@@ -210,14 +295,14 @@ const Contact = ({ generalDetails }) => {
               Contact Us
             </p>
 
-            <Person
+            <ContactPerson
               name={content?.contactName1}
               phone={content?.contactNumber1}
               email={content?.contactEmail1}
             />
 
             {content?.contactName2 && (content?.contactNumber2 || content?.contactEmail2) && (
-              <Person
+              <ContactPerson
                 name={content?.contactName2}
                 phone={content?.contactNumber2}
                 email={content?.contactEmail2}
@@ -266,7 +351,7 @@ const Contact = ({ generalDetails }) => {
   )
 }
 
-const Person = ({ name, phone, email }) => {
+const ContactPerson = ({ name, phone, email }) => {
 
   const toTitleCase = (phrase) => {
     return phrase?.toLowerCase()
@@ -319,5 +404,28 @@ const Social = ({ link, icon }) => {
     </button>
   )
 }
+
+const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = false, year = "", from = "", to = "" }) => {
+  return (
+    <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
+      {role1.length > 0 && (
+        <div className={`mt-12 lg:mt-8 mb-4 uppercase tracking-widest h-14 text-xl ${nowrap && "whitespace-nowrap"}`}>
+          {role1}
+        </div>
+      )}
+      <div className={`min-w-max h-52 group flex justify-center`}>
+        {image && (
+          <img src={image} alt={name} className="h-44 w-44 aspect-square rounded-full mt-2 border-[#b5ecd8] group-hover:border-[#8becc8] transition-all ease-in-out border-8 box-border object-cover" />
+        )}
+      </div>
+      <div className=" w-full mt-4 mb-1 font-bold text-xl">
+        {name}
+      </div>
+      <div className="text-sm text-gray-600">{year}</div>
+      <div className="font-semibold text-sm text-indigo-700 my-0.5">{role2}</div>
+      <div className="text-xs text-gray-600">{from} - {to}</div>
+    </div>
+  );
+};
 
 export default ClubLanding;
