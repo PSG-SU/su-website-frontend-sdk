@@ -58,7 +58,7 @@ const Feed = ({ id = "all" }) => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 2500);
   }, []);
 
   useEffect(() => {

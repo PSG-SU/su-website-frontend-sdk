@@ -19,6 +19,7 @@ const ClubLanding = () => {
   const [faculty, setFaculty] = useState([]);
   const [team, setTeam] = useState([]);
 
+  const [loading, setLoading] = useState(true);
   const [aboutHeight, setAboutHeight] = useState(0);
   const [sticky, setSticky] = useState(false);
   const [teamDivPos, setTeamDivPos] = useState("left")
@@ -109,6 +110,12 @@ const ClubLanding = () => {
     }
   }, [team, faculty]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+  }, []);
+
   return (
     <Layout>
       <div className="w-full">
@@ -127,57 +134,79 @@ const ClubLanding = () => {
               }
           }
         ></div>
-        <div className="flex flex-col lg:flex-row items-center space-x-6 -mt-12 lg:-mt-36">
+        <div className="flex flex-col lg:flex-row items-center gap-6 -mt-12 lg:-mt-36">
           <img
             className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full bg-gray-100 border-4 lg:border-8 border-gray-200 lg:ml-16 object-contain"
             src={details?.general?.image_url ? details?.general?.image_url : "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/PSG_College_of_Technology_logo.png/220px-PSG_College_of_Technology_logo.png"}
             alt="club-logo"
           />
-          <div className="pt-4 lg:pt-36 pr-4 lg:pr-0 text-center lg:text-left">
-            <p className="text-gray-800 font-sans text-2xl lg:text-4xl font-bold">
-              {details ? details.clubName : "Loading.."}{" "}
-            </p>
-            <p className="text-gray-600 pt-1">
-              {details?.general?.tagline && details.general.tagline !== "No tagline provided" && details.general.tagline}
-              {details?.general?.website &&
-                <button className="sm:inline-block pl-2 sm:pl-0"
-                  onClick={() => { window.open(details.general.website.startsWith("http") ? details.general.website : "https://" + details.general.website) }}
-                >
-                  {details?.general?.tagline && details.general.tagline !== "No tagline provided" && <p className="hidden sm:inline-block mx-2">{' | '}</p>}
-                  <p className="sm:inline-block font-semibold hover:underline hover:text-blue-600">{details.general.website}</p>
-                </button>
-              }</p>
-          </div>
+          {details?.clubName ? (
+            <div className="lg:pt-36 text-center lg:text-left">
+              <p className="text-gray-800 font-sans text-2xl lg:text-4xl font-bold">
+                {details.clubName}
+              </p>
+              <p className="text-gray-600 pt-1">
+                {details?.general?.tagline && details.general.tagline !== "No tagline provided" && details.general.tagline}
+                {details?.general?.website &&
+                  <button className="sm:inline-block pl-2 sm:pl-0"
+                    onClick={() => { window.open(details.general.website.startsWith("http") ? details.general.website : "https://" + details.general.website) }}
+                  >
+                    {details?.general?.tagline && details.general.tagline !== "No tagline provided" && <p className="hidden sm:inline-block mx-2">{' | '}</p>}
+                    <p className="sm:inline-block font-semibold hover:underline hover:text-blue-600">{details.general.website}</p>
+                  </button>
+                }</p>
+            </div>
+          ) : (
+            <div className="lg:pt-36 flex flex-col items-center lg:items-start">
+              <div className="bg-gray-500 h-10 w-56 rounded-lg" id="skeleton-dark"></div>
+              <div className="bg-gray-500 h-8 w-80 mt-2 rounded-md" id="skeleton-dark"></div>
+            </div>
+          )}
         </div>
-        {/* <div className="lg:hidden w-full h-0.5 mt-6 bg-gray-500"></div> */}
 
         <div className="flex flex-col lg:flex-row w-full items-center lg:items-start gap-8 my-8">
-          <div className={`flex flex-col gap-8 w-full lg:w-1/4`} id='about'>
-            <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
-              <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
-              <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
-                {details?.general?.description ||
-                  "No description provided"}
-              </p>
-              {
-                details?.general?.website && (
-                  <p className="mt-2 text-base flex flex-col items-center lg:items-start">
-                    <span className="">For More Information</span>
-                    <button className="text-blue-600 hover:underline font-semibold flex items-center space-x-2" onClick={() => {
-                      window.open(details.general.website.startsWith("http") ? details.general.website : "https://" + details.general.website)
-                    }}
-                    >
-                      <AiOutlineLink />
-                      <p className="">Click Here</p>
-                    </button>
-                  </p>
-                )}
-            </section>
+          {details ? (
+            <div className={`flex flex-col gap-8 w-full lg:w-1/4`} id='about'>
+              <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
+                <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
+                <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
+                  {details?.general?.description ||
+                    "No description provided"}
+                </p>
+                {
+                  details?.general?.website && (
+                    <p className="mt-2 text-base flex flex-col items-center lg:items-start">
+                      <span className="">For More Information</span>
+                      <button className="text-blue-600 hover:underline font-semibold flex items-center space-x-2" onClick={() => {
+                        window.open(details.general.website.startsWith("http") ? details.general.website : "https://" + details.general.website)
+                      }}
+                      >
+                        <AiOutlineLink />
+                        <p className="">Click Here</p>
+                      </button>
+                    </p>
+                  )}
+              </section>
 
-            <div className="hidden lg:block">
-              <Contact generalDetails={details} />
+              <div className="hidden lg:block">
+                <Contact generalDetails={details} />
+              </div>
             </div>
-          </div>
+          ) : loading ? (
+            <div className="w-full lg:w-1/4">
+              <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col gap-2 items-center lg:items-start">
+                <div className="bg-gray-500 h-6 w-full rounded-md" id="skeleton"></div>
+                <div className="bg-gray-500 h-6 w-3/4 rounded-md" id="skeleton"></div>
+                <div className="bg-gray-500 h-6 w-1/2 rounded-md" id="skeleton"></div>
+              </section>
+            </div>
+          ) : (
+            <div className="flex flex-col w-full lg:w-1/4">
+              <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6">
+                <p className="text-base text-gray-500 text-center lg:text-left">Uh oh! Nothing to show here. Please check back later.</p>
+              </section>
+            </div>
+          )}
 
           <div className={`flex flex-col gap-8 w-full lg:w-1/2 items-center lg:overflow-auto`} id='feed'
           // style={{ maxHeight: aboutHeight, minHeight: "800px" }}
@@ -207,7 +236,7 @@ const ClubLanding = () => {
               </div>
             </section>
 
-            <div className="lg:hidden w-full">
+            <div className="lg:hidden w-full pt-4">
               <Contact generalDetails={details} />
             </div>
           </div>
@@ -215,7 +244,7 @@ const ClubLanding = () => {
       </div>
 
       {(faculty.length > 0 || team.length > 0) && (
-        <div className="w-full flex flex-col items-center pt-8 lg:pt-0">
+        <div className="w-full flex flex-col items-center pt-6 lg:pt-0">
           <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-8 w-fit border-t-4 border-t-gray-400">Our Team</div>
           <section className="lg:bg-gray-200 rounded-xl py-8 w-full">
             <p className="hidden lg:block text-xl text-gray-700 font-bold text-center">Our Team</p>
