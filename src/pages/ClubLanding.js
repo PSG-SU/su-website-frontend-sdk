@@ -83,7 +83,7 @@ const ClubLanding = () => {
         } else {
           setSticky(false);
           const feedDiv = document.getElementById("feed");
-          if (feedDiv) { feedDiv.style.maxHeight = `none`; }
+          if (feedDiv) { feedDiv.style.maxHeight = `none`; feedDiv.style.minHeight = `800px`; }
         }
       }
     }

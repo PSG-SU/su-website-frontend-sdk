@@ -156,7 +156,7 @@ const Feed = ({ id = "all" }) => {
                     <div>
                       <div className="w-full h-auto max-h-[40rem] relative group">
                         <button
-                          className="hidden lg:block bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one"
+                          className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one`}
                           onClick={() => {
                             if (imageIndices[index] > 0) {
                               setImageIndices(imageIndices.map((val, i) => i === index ? val - 1 : val));
@@ -169,7 +169,7 @@ const Feed = ({ id = "all" }) => {
                         </button>
                         <img src={ev.images[imageIndices[index]]} alt={ev.eventName} className="w-full h-auto max-h-[40rem] object-contain" />
                         <button
-                          className="hidden lg:block bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one"
+                          className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one`}
                           onClick={() => {
                             if (imageIndices[index] < ev.images.length - 1) {
                               setImageIndices(imageIndices.map((val, i) => i === index ? val + 1 : val));
@@ -197,7 +197,7 @@ const Feed = ({ id = "all" }) => {
 
                         <div>
                           {
-                            ev.images?.map((image, curIndex) => {
+                            (ev.images?.length > 1) && ev.images?.map((image, curIndex) => {
                               return (
                                 <button className={`w-3 h-3 rounded-full border-2 border-gray-600 ${curIndex === imageIndices[index] && "bg-gray-600"} inline-block mx-2 cursor-pointer`}
                                   onClick={() => {

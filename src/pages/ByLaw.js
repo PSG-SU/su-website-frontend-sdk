@@ -32,7 +32,7 @@ const ByLaw = () => {
         SU <span className="font-bold">By Law</span>
       </h1>
       <div className='w-full flex justify-center'>
-        <div className="mt-8 h-[calc(100vh-6rem)] w-full px-4 lg:px-0 lg:w-3/4">
+        <div className="mt-8 h-[calc(100vh-6rem)] w-full px-4 lg:px-0 lg:w-3/4 bg-gray-50">
           {content?.file_url && (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.min.js">
               <Viewer fileUrl={content?.file_url}
@@ -40,7 +40,7 @@ const ByLaw = () => {
             </Worker>
           )}
 
-          {!content?.file_url && <div className='w-full flex justify-center'>
+          {!content?.file_url && <div className='w-full flex justify-center bg-gray-50'>
             <img src="https://i.ibb.co/PZLc3WF/wired-outline-334-loader-5.gif" width={"100px"} alt="Loading..." border="0" />
           </div>}
 
