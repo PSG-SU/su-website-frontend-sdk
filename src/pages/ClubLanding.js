@@ -58,39 +58,39 @@ const ClubLanding = () => {
       });
   }, []);
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      const height = document.getElementById("about")?.clientHeight;
-      setAboutHeight(height);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
+  // useLayoutEffect(() => {
+  //   function updateSize() {
+  //     const height = document.getElementById("about")?.clientHeight;
+  //     setAboutHeight(height);
+  //   }
+  //   window.addEventListener("resize", updateSize);
+  //   updateSize();
+  //   return () => window.removeEventListener("resize", updateSize);
+  // }, []);
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      const y = document.getElementById("feed").getBoundingClientRect().top;
+  // useLayoutEffect(() => {
+  //   function updateSize() {
+  //     const y = document.getElementById("feed").getBoundingClientRect().top;
 
-      if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        if (y <= 85) {
-          setSticky(true);
-          const feedDiv = document.getElementById("feed");
-          if (feedDiv) {
-            feedDiv.style.maxHeight = `${aboutHeight}px`;
-            feedDiv.style.minHeight = `800px`;
-          }
-        } else {
-          setSticky(false);
-          const feedDiv = document.getElementById("feed");
-          if (feedDiv) { feedDiv.style.maxHeight = `none`; feedDiv.style.minHeight = `800px`; }
-        }
-      }
-    }
-    window.addEventListener("scroll", updateSize);
-    updateSize();
-    return () => window.removeEventListener("scroll", updateSize);
-  }, [aboutHeight]);
+  //     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  //       if (y <= 85) {
+  //         setSticky(true);
+  //         const feedDiv = document.getElementById("feed");
+  //         if (feedDiv) {
+  //           feedDiv.style.maxHeight = `${aboutHeight}px`;
+  //           feedDiv.style.minHeight = `800px`;
+  //         }
+  //       } else {
+  //         setSticky(false);
+  //         const feedDiv = document.getElementById("feed");
+  //         if (feedDiv) { feedDiv.style.maxHeight = `none`; feedDiv.style.minHeight = `800px`; }
+  //       }
+  //     }
+  //   }
+  //   window.addEventListener("scroll", updateSize);
+  //   updateSize();
+  //   return () => window.removeEventListener("scroll", updateSize);
+  // }, [aboutHeight]);
 
   useEffect(() => {
     const teamDiv = document.getElementById("team");
