@@ -8,7 +8,7 @@ const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = fals
   return (
     <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
       {role1.length > 0 && (
-        <div className={`mt-12 lg:mt-8 mb-4 uppercase tracking-widest text-xl ${nowrap && "whitespace-nowrap"}`}>
+        <div className={`lg:h-12 mt-12 lg:mt-8 mb-4 uppercase tracking-widest text-xl ${nowrap && "whitespace-nowrap"}`}>
           {role1}
         </div>
       )}
@@ -26,12 +26,12 @@ const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = fals
 };
 
 const OurTeam = () => {
-  const [team, setTeam] = useState([]);
   const [chair, setChair] = useState({});
   const [CoChair, setCoChair] = useState({});
   const [Secremale, setSecremale] = useState({});
   const [Secrefemale, setSecrefemale] = useState({});
   const [SecreScie, setSecreScie] = useState({});
+
   const [chief, setChief] = useState({});
   const [patron, setPatron] = useState({});
   const [deanStudent, setDeanStudent] = useState({});
@@ -41,29 +41,87 @@ const OurTeam = () => {
   const [clubCat1, setClubCat1] = useState([]);
   const [clubCat2, setClubCat2] = useState([]);
   const [clubCat3, setClubCat3] = useState([]);
-  const [years, setYears] = useState([]);
-  const [yearButton, setYearButton] = useState([]);
-  const [clickedYear, setClickedYear] = useState(`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`);
-  const [endYear, setEndYear] = useState("");
-  const startYear = 2015;
+
+  const [selectedYear, setSelectedYear] = useState('');
+  const [yearWise, setYearWise] = useState(null);
+  const [yearsScroll, setYearsScroll] = useState('right')
 
   useEffect(() => {
-    setYears([]);
-    if (window.innerWidth < 768) {
-      for (let i = endYear - 1; i <= endYear; i++) {
-        setYears((years) => [...years, `${i}-${i + 1}`]);
-      }
-    } else {
-      for (let i = endYear - 6; i <= endYear; i++) {
-        setYears((years) => [...years, `${i}-${i + 1}`]);
-      }
-    }
-  }, [endYear]);
+    axios
+      .get("http://localhost:3002/api/office-bearers")
+      .then((res) => {
+        let bearers = res.data;
+        let year_wise = {};
+
+        for (let index = 0; index < bearers.length; index++) {
+          let element = bearers[index];
+          if (year_wise[element.year]) {
+            year_wise[element.year].push(element);
+          } else {
+            year_wise[element.year] = [element];
+          }
+        }
+
+        setYearWise(year_wise);
+        setSelectedYear(Object.keys(year_wise).sort().reverse()[0]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
-    if (yearButton) {
-      for (let index = 0; index < yearButton.length; index++) {
-        const element = yearButton[index];
+    axios
+      .get("http://localhost:3002/api/suteam")
+      .then((res) => {
+        let team = res.data;
+
+        let studentCounsel = team.filter(
+          (item) => item.role === "Student Welfare & Councelling"
+        );
+        let generalCounsel = team.filter(
+          (item) => item.role === "General Functioning"
+        );
+        let clubCategory1 = team.filter(
+          (item) =>
+            item.role ===
+            "Tech Music, Dramatics Club, Astronomy Club, Animal Welfare Club, WDC, Martial Arts Club"
+        );
+        let clubCategory2 = team.filter(
+          (item) =>
+            item.role ===
+            "CAP & Nature Club, ELS, Entrepreneurs Club, NSS, Tamil Mandram, Fine Arts Club, YRC, Rotaract Club, Radio Hub"
+        );
+        let clubCategory3 = team.filter(
+          (item) =>
+            item.role ===
+            "Higher Education Forum, Pathshala Club, GLF, SRC, Industry (Alumni) - Interaction Forum, Book Readers Club"
+        );
+
+        for (let index = 0; index < team.length; index++) {
+          let element = team[index];
+          if (element.role === "Chief Patron") {
+            setChief(element);
+          } else if (element.role === "Patron") {
+            setPatron(element);
+          } else if (element.role === "Dean - Student Affairs") {
+            setDeanStudent(element);
+          } else if (element.role === "Associate Dean - Finance") {
+            setDeanFinance(element);
+          }
+        }
+
+        setStudentCounsel(studentCounsel);
+        setGeneralCounsel(generalCounsel);
+        setClubCat1(clubCategory1);
+        setClubCat2(clubCategory2);
+        setClubCat3(clubCategory3);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    if (selectedYear && yearWise) {
+      for (let index = 0; index < yearWise[selectedYear].length; index++) {
+        const element = yearWise[selectedYear][index];
         if (element.role === "Chairperson") {
           setChair(element);
         } else if (element.role === "Co-Chairperson") {
@@ -80,103 +138,33 @@ const OurTeam = () => {
         }
       }
 
-      if (yearButton.length === 4) {
+      if (yearWise[selectedYear].length === 4) {
         setSecreScie({});
       }
-
     }
-  }, [yearButton]);
+  }, [selectedYear, yearWise]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3002/api/office-bearers")
-      .then((res) => {
-        // setTeam(res.data);
-        let teams = res.data;
-        let year_wise = {};
-        for (let index = 0; index < teams.length; index++) {
-          let element = teams[index];
-          if (year_wise[element.year]) {
-            year_wise[element.year].push(element);
-          } else {
-            year_wise[element.year] = [element];
-          }
-        }
-        // console.log(year_wise);
-        setTeam(year_wise);
+    const office = document.getElementById('officeBearers');
+    if (office) {
+      office.scrollLeft = office.scrollWidth;
+    }
 
-        if (year_wise[`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`]) {
-          setYearButton(year_wise[`${new Date().getFullYear()}-${new Date().getFullYear() + 1}`]);
-        }
-        else {
-          setClickedYear(`${new Date().getFullYear() - 1}-${new Date().getFullYear()}`);
-          setYearButton(year_wise[`${new Date().getFullYear() - 1}-${new Date().getFullYear()}`]);
-          setEndYear(new Date().getFullYear() - 1);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    office.addEventListener('scroll', () => {
+      const scrollLeft = office?.scrollLeft;
+      const scrollWidth = office?.scrollWidth;
+      const clientWidth = office?.clientWidth;
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3002/api/suteam")
-      .then((res) => {
-        // setTeam(res.data);
-        let team = res.data;
-        let stuCoun = [];
-        stuCoun = team.filter(
-          (item) => item.role === "Student Welfare & Councelling"
-        );
-        let genCoun = team.filter(
-          (item) => item.role === "General Functioning"
-        );
-        let clubCat1 = team.filter(
-          (item) =>
-            item.role ===
-            "Tech Music, Dramatics Club, Astronomy Club, Animal Welfare Club, WDC, Martial Arts Club"
-        );
-        let clubCat2 = team.filter(
-          (item) =>
-            item.role ===
-            "CAP & Nature Club, ELS, Entrepreneurs Club, NSS, Tamil Mandram, Fine Arts Club, YRC, Rotaract Club, Radio Hub"
-        );
-        let clubCat3 = team.filter(
-          (item) =>
-            item.role ===
-            "Higher Education Forum, Pathshala Club, GLF, SRC, Industry (Alumni) - Interaction Forum, Book Readers Club"
-        );
+      if (scrollLeft === 0) {
+        setYearsScroll("left");
+      } else if (scrollLeft - 2 <= scrollWidth - clientWidth && scrollLeft + 2 >= scrollWidth - clientWidth) {
+        setYearsScroll("right");
+      } else {
+        setYearsScroll("middle");
+      }
+    });
 
-        for (let index = 0; index < team.length; index++) {
-          let element = team[index];
-          if (element.role === "Chief Patron") {
-            console.log(element);
-            setChief(element);
-          } else if (element.role === "Patron") {
-            console.log(element);
-            setPatron(element);
-          } else if (element.role === "Dean - Student Affairs") {
-            console.log(element);
-            setDeanStudent(element);
-          } else if (element.role === "Associate Dean - Finance") {
-            console.log(element);
-            setDeanFinance(element);
-          }
-        }
-
-
-        console.log(stuCoun);
-        setStudentCounsel(stuCoun);
-        console.log(genCoun);
-        setGeneralCounsel(genCoun);
-        console.log(clubCat1);
-        setClubCat1(clubCat1);
-        console.log(clubCat2);
-        setClubCat2(clubCat2);
-        console.log(clubCat3);
-        setClubCat3(clubCat3);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  }, [yearWise])
 
   return (
     <Layout>
@@ -260,8 +248,7 @@ const OurTeam = () => {
             Associated Clubs
           </div>
           <div className="font-bold text-center text-xl mt-4">
-            Tech Music , Dramatics Club , Astronomy Club , Animal Welfare Club ,
-            WDC , Martial Arts Club
+            {clubCat1[0]?.role}
           </div>
           {clubCat1.length > 0 && (
             <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
@@ -283,8 +270,7 @@ const OurTeam = () => {
             Associated Clubs
           </div>
           <div className="font-bold text-center text-xl mt-4">
-            CAP & Nature Club, ELS, Entrepreneurs Club, NSS, Tamil Mandram, Fine
-            Arts Club, YRC, Rotaract Club, Radio Hub
+            {clubCat2[0]?.role}
           </div>
           {clubCat2.length > 0 && (
             <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
@@ -306,8 +292,7 @@ const OurTeam = () => {
             Associated Clubs
           </div>
           <div className="font-bold text-center text-xl mt-4">
-            Higher Education Forum, Pathshala Club, GLF, SRC, Industry
-            (Alumni)-Interaction Forum, Book Readers Club
+            {clubCat3[0]?.role}
           </div>
           {clubCat3.length > 0 && (
             <div className="flex-auto lg:flex lg:justify-center flex-row mt-4 space-y-8 lg:space-y-0">
@@ -330,46 +315,50 @@ const OurTeam = () => {
           <div className="font-bold text-3xl text-center">
             Office Bearers of the Students Union
           </div>
-          <div className="flex flex-row justify-between items-center mt-6">
-            <div className="w-10 lg:w-20">
+          <div className="flex flex-row justify-between items-center mt-6 gap-4">
+            <div className="hidden lg:block w-10 lg:w-20">
               <button
-                className={`${years[0]?.split("-")[0] - 1 < startYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
+                className={`${yearsScroll === 'left' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
-                  if (years[0].split("-")[0] - 1 < startYear) return;
-                  setYears([`${years[0].split("-")[0] - 1}-${years[0].split("-")[0]}`, ...years.slice(0, years.length - 1)])
+                  const office = document.getElementById('officeBearers');
+                  office?.scrollBy({
+                    left: -office.clientWidth / 2,
+                    behavior: 'smooth'
+                  })
                 }}
               >
-                <BiChevronLeft className="text-[2rem] lg:text-[2.5rem] text-white" />
+                <BiChevronLeft className="text-[2rem] text-white" />
               </button>
             </div>
-            <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 justify-center text-center">
-              {years.map((year) => (
+            <div className="flex flex-row items-center gap-x-4 lg:gap-x-8 text-center overflow-auto no-scrollbar" id='officeBearers'>
+              {yearWise && Object.keys(yearWise)?.sort().map((year) => (
                 <button
-                  className={`rounded-2xl ${year === clickedYear ? "bg-black" : "bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out"
-                    } text-white px-4 py-2`}
+                  className={`rounded-2xl ${year === selectedYear ? "bg-black" : "bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out"
+                    } text-white px-4 py-2 font-poppins min-w-fit`}
                   onClick={() => {
-                    console.log(year);
-                    console.log(team[year]);
-                    setClickedYear(year);
-                    setYearButton(team[year]);
+                    setSelectedYear(year);
                   }}
                 >
                   {year.split("-")[0]}{" - "}{year.split("-")[1]}
                 </button>
               ))}
             </div>
-            <div className="w-10 lg:w-20 flex justify-end">
+            <div className="hidden lg:flex w-10 lg:w-20 justify-end">
               <button
-                className={`${years[years.length - 1]?.split("-")[1] > endYear ? "hidden" : "block bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
+                className={`${yearsScroll === 'right' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
-                  if (years[years.length - 1].split("-")[1] > endYear) return;
-                  setYears([...years.slice(1, years.length), `${years[years.length - 1].split("-")[1]}-${parseInt(years[years.length - 1].split("-")[1]) + 1}`])
+                  const office = document.getElementById('officeBearers');
+                  office?.scrollBy({
+                    left: office.clientWidth / 2,
+                    behavior: 'smooth'
+                  })
                 }}
               >
-                <BiChevronRight className="text-[2rem] lg:text-[2.5rem] text-white" />
+                <BiChevronRight className="text-[2rem] text-white" />
               </button>
             </div>
           </div>
+
           <div className="flex flex-col lg:flex-row mt-4 mb-12 w-full">
             <Person
               name={chair.name}
@@ -383,7 +372,7 @@ const OurTeam = () => {
               image={CoChair.image_url}
               role1={CoChair.role}
               role2={CoChair.deptyos}
-              nowrap
+              // nowrap
               ob
             />
             <Person
@@ -391,7 +380,7 @@ const OurTeam = () => {
               image={Secremale.image_url}
               role1={Secremale.role}
               role2={Secremale.deptyos}
-              nowrap
+              // nowrap
               ob
             />
             <Person
@@ -399,7 +388,7 @@ const OurTeam = () => {
               image={Secrefemale.image_url}
               role1={Secrefemale.role}
               role2={Secrefemale.deptyos}
-              nowrap
+              // nowrap
               ob
             />
             {SecreScie?.name && (
@@ -408,7 +397,7 @@ const OurTeam = () => {
                 image={SecreScie.image_url}
                 role1={SecreScie.role}
                 role2={SecreScie.deptyos}
-                {...(SecreScie.role === "Secretary (Science)" && { nowrap: true })}
+                // {...(SecreScie.role === "Secretary (Science)" && { nowrap: true })}
                 ob
               />
             )}

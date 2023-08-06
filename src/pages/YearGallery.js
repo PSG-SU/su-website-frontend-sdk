@@ -3,6 +3,7 @@ import Layout from './Layout'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
 import { GALLERY_URL } from "../API/config";
 import axios from 'axios';
+import GLightbox from 'glightbox';
 
 const YearGallery = () => {
   const [yearWise, setYearWise] = useState(null);
@@ -56,6 +57,7 @@ const YearTitle = ({ className, title }) => {
 const YearAccordion = ({ yearObj, year }) => {
   const titles = yearObj.map((e) => { return e.event })
   const coverImages = yearObj.map((e) => { return e.image_url })
+  const allImages = yearObj.map((e) => { return e.images })
 
   return (
     <React.Fragment>
@@ -65,89 +67,110 @@ const YearAccordion = ({ yearObj, year }) => {
             <MoreImages
               titles={titles}
               coverImages={coverImages}
+              allImages={allImages}
               index={year}
             />
           ) : yearObj.length === 4 ? (
             <FourImage
               titles={titles}
+              allImages={allImages}
               coverImages={coverImages}
             />
           ) : yearObj.length === 3 ? (
             <ThreeImage
               titles={titles}
+              allImages={allImages}
               coverImages={coverImages}
             />
           ) : yearObj.length < 3 && (
             <TwoImage
               titles={titles}
+              allImages={allImages}
               coverImages={coverImages}
               text={'4xl'}
             />
-          ) 
+          )
         }
       </div>
 
       <div className='lg:hidden flex flex-row h-[calc(25vh)] gap-2 overflow-auto rounded-xl text-xl pt-4' id={'slider' + year}>
         {coverImages.map((img, i) => {
-          return (<ImageCover img={img} title={titles[i]} className={'min-w-fit w-[calc(70vw)]'} imgClass={'w-[calc(75vw)]'} />)
+          return (<ImageCover coverImage={img} title={titles[i]} className={'min-w-fit w-[calc(70vw)]'} imgClassName={'w-[calc(75vw)]'} />)
         })}
       </div>
     </React.Fragment>
   )
 }
 
-const ImageCover = ({ img, title, className, imgClass }) => {
+const ImageCover = ({ coverImage, title, className, imgClassName, allImages }) => {
+  const imagesJSON = allImages?.map((img) => {
+    return {
+      'href': img,
+      'type': 'image',
+    }
+  });
+
+  const myGallery = GLightbox({
+    elements: imagesJSON,
+    autoplayVideos: true,
+  });
+
   return (
-    <div className={`${className} w-full h-full rounded-xl overflow-hidden relative group`}>
-      <img src={img} alt="img" className={`${imgClass} w-full h-full object-cover rounded-xl group-hover:scale-105 transition-all ease-in-out`} />
+    <button
+      className={`${className} w-full h-full rounded-xl overflow-hidden relative group`}
+      onClick={() => {
+        myGallery.open();
+      }}
+    >
+      <img src={coverImage} alt="img" className={`${imgClassName} w-full h-full object-cover rounded-xl group-hover:scale-105 transition-all ease-in-out`} />
       <div className='absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black opacity-50 rounded-xl'></div>
-      <p className={`absolute bottom-2 lg:bottom-4 left-4 font-semibold text-gray-200 uppercase z-10`}>{title}</p>
-    </div>
+      <p className={`absolute bottom-2 lg:bottom-4 left-4 font-semibold text-gray-200 text-left uppercase z-10`}>{title}</p>
+    </button>
   )
 }
 
-const TwoImage = ({ titles, coverImages, text }) => {
+const TwoImage = ({ titles, coverImages, text, allImages }) => {
   return (
     <div className={`w-full h-[calc(60vh)] flex flex-row mt-8 gap-2 text-${text}`}>
       {coverImages.map((img, i) => {
-        return (<ImageCover img={img} title={titles[i]} />)
+        return (<ImageCover coverImage={img} title={titles[i]} allImages={allImages[i]} />)
       })}
     </div>
   )
 }
 
-const ThreeImage = ({ titles, coverImages }) => {
+const ThreeImage = ({ titles, coverImages, allImages }) => {
   return (
     <div className={`h-[calc(50vh)] flex flex-row mt-8 gap-2`}>
       <div className='w-2/3 text-3xl'>
-        <ImageCover img={coverImages[0]} title={titles[0]} />
+        <ImageCover coverImage={coverImages[0]} title={titles[0]} allImages={allImages[0]} />
       </div>
       <div className='w-1/3 flex flex-col gap-2 text-2xl'>
-        <ImageCover img={coverImages[1]} title={titles[1]} />
-        <ImageCover img={coverImages[2]} title={titles[2]} />
+        <ImageCover coverImage={coverImages[1]} title={titles[1]} allImages={allImages[1]} />
+        <ImageCover coverImage={coverImages[2]} title={titles[2]} allImages={allImages[2]} />
       </div>
     </div>
   )
 }
 
-const FourImage = ({ titles, coverImages }) => {
+const FourImage = ({ titles, coverImages, allImages }) => {
   return (
     <div className={`h-[calc(50vh)] flex flex-row mt-8 gap-2`}>
       <div className='w-1/3 flex flex-row gap-2 text-3xl'>
-        <ImageCover img={coverImages[0]} title={titles[0]} />
+        <ImageCover coverImage={coverImages[0]} title={titles[0]} allImages={allImages[0]} />
       </div>
       <div className='w-1/3 flex flex-row gap-2 text-3xl'>
-        <ImageCover img={coverImages[1]} title={titles[1]} />
+        <ImageCover coverImage={coverImages[1]} title={titles[1]} allImages={allImages[1]} />
       </div>
       <div className='w-1/3 flex flex-col gap-2 text-2xl'>
-        <ImageCover img={coverImages[2]} title={titles[2]} />
-        <ImageCover img={coverImages[3]} title={titles[3]} />
+        <ImageCover coverImage={coverImages[2]} title={titles[2]} allImages={allImages[2]} />
+        <ImageCover coverImage={coverImages[3]} title={titles[3]} allImages={allImages[3]} />
       </div>
     </div>
   )
 }
 
-const MoreImages = ({ titles, coverImages, index }) => {
+const MoreImages = ({ titles, coverImages, index, allImages }) => {
   const [imgPos, setImgPos] = useState("left");
   const [arrowsHidden, setArrowsHidden] = useState(false);
 
@@ -180,16 +203,16 @@ const MoreImages = ({ titles, coverImages, index }) => {
     <div className='flex flex-col gap-2 mt-8'>
       <div className='h-[calc(50vh)] flex flex-row gap-2'>
         <div className='w-2/3 text-3xl'>
-          <ImageCover img={coverImages[0]} title={titles[0]} />
+          <ImageCover coverImage={coverImages[0]} title={titles[0]} allImages={allImages[0]} />
         </div>
         <div className='w-1/3 flex flex-col gap-2 text-2xl'>
-          <ImageCover img={coverImages[1]} title={titles[1]} />
-          <ImageCover img={coverImages[2]} title={titles[2]} />
+          <ImageCover coverImage={coverImages[1]} title={titles[1]} allImages={allImages[1]} />
+          <ImageCover coverImage={coverImages[2]} title={titles[2]} allImages={allImages[2]} />
         </div>
       </div>
       <div className='flex flex-row h-[calc(25vh)] gap-2 overflow-auto rounded-xl text-xl' id={'slider' + index}>
         {coverImages.slice(3).map((img, i) => {
-          return (<ImageCover img={img} title={titles[i + 3]} className={'min-w-fit'} imgClass={''} />)
+          return (<ImageCover coverImage={img} title={titles[i + 3]} className={'min-w-fit'} imgClassName={''} allImages={allImages[i + 3]} />)
         })}
       </div>
 

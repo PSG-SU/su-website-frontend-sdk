@@ -101,7 +101,7 @@ const ClubLanding = () => {
         const clientWidth = teamDiv.clientWidth;
         if (scrollLeft === 0) {
           setTeamDivPos("left");
-        } else if (scrollLeft === scrollWidth - clientWidth) {
+        } else if (scrollLeft - 2 <= scrollWidth - clientWidth && scrollLeft + 2 >= scrollWidth - clientWidth) {
           setTeamDivPos("right");
         } else {
           setTeamDivPos("middle");
