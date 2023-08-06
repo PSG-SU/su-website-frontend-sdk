@@ -141,7 +141,7 @@ const ClubLanding = () => {
             alt="club-logo"
           />
           {details?.clubName ? (
-            <div className="lg:pt-36 text-center lg:text-left">
+            <div className="lg:pt-36 text-center lg:text-left px-8 lg:px-0">
               <p className="text-gray-800 font-sans text-2xl lg:text-4xl font-bold">
                 {details.clubName}
               </p>

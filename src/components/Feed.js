@@ -17,7 +17,6 @@ const Feed = ({ id = "all" }) => {
   const [event, setEvent] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [generals, setGenerals] = useState([]);
-  const [imageIndices, setImageIndices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [nextCircle, setNextCircle] = useState(0);
 
@@ -26,6 +25,7 @@ const Feed = ({ id = "all" }) => {
       .get(`${FEED_URL}`)
       .then((res) => {
         console.log(res.data);
+        setLoading(false);
         if (id !== "all") {
           setAllEvents(res.data.filter((e) => e.user === id));
           setCurrentEvents(res.data.filter((e) => e.user === id).filter(e => new Date(e.endDate) > new Date()));
@@ -50,10 +50,6 @@ const Feed = ({ id = "all" }) => {
       setGenerals(res.data);
     }).catch(err => console.log(err));
   }, []);
-
-  useEffect(() => {
-    setImageIndices(new Array(event?.length).fill(0));
-  }, [event]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -94,6 +90,24 @@ const Feed = ({ id = "all" }) => {
       return diffMinutes === 1 ? "1 minute ago" : diffMinutes + " minutes ago";
     } else {
       return "Just now";
+    }
+  }
+
+  const scrollLeft = (id) => {
+    const imagesCarousel = document.getElementById(id);
+    if (imagesCarousel) {
+      imagesCarousel.scrollBy({
+        left: -imagesCarousel.clientWidth, behavior: 'smooth'
+      });
+    }
+  }
+
+  const scrollRight = (id) => {
+    const imagesCarousel = document.getElementById(id);
+    if (imagesCarousel) {
+      imagesCarousel.scrollBy({
+        left: imagesCarousel.clientWidth, behavior: 'smooth'
+      });
     }
   }
 
@@ -157,73 +171,61 @@ const Feed = ({ id = "all" }) => {
                       <div className="w-full h-auto max-h-[40rem] relative group">
                         <button
                           className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one`}
-                          onClick={() => {
-                            if (imageIndices[index] > 0) {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? val - 1 : val));
-                            } else {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? ev.images.length - 1 : val));
-                            }
-                          }}
+                          onClick={() => { scrollLeft('imagesDiv' + index); }}
                         >
                           <BsChevronLeft className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
                         </button>
-                        <img src={ev.images[imageIndices[index]]} alt={ev.eventName} className="w-full h-auto max-h-[40rem] object-contain" />
+                        <div className='w-full h-auto max-h-[40rem] overflow-x-scroll flex flex-row snap-x snap-mandatory no-scrollbar' id={'imagesDiv' + index}>
+                          {ev.images?.map((image) => {
+                            return (
+                              <img src={image} alt={ev.eventName} className={`min-w-full h-auto max-h-[40rem] object-contain snap-start`} />
+                            )
+                          })}
+                        </div>
                         <button
                           className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one`}
-                          onClick={() => {
-                            if (imageIndices[index] < ev.images.length - 1) {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? val + 1 : val));
-                            } else {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? 0 : val));
-                            }
-                          }}
+                          onClick={() => { scrollRight('imagesDiv' + index); }}
                         >
                           <BsChevronRight className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
                         </button>
                       </div>
-                      <div className="w-full py-4 flex items-center justify-between lg:justify-center">
-                        <button
-                          className="lg:hidden group w-10 h-10 pl-4"
-                          onClick={() => {
-                            if (imageIndices[index] > 0) {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? val - 1 : val));
-                            } else {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? ev.images.length - 1 : val));
-                            }
-                          }}
-                        >
-                          <BsChevronLeft className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
-                        </button>
 
-                        <div>
-                          {
-                            (ev.images?.length > 1) && ev.images?.map((image, curIndex) => {
-                              return (
-                                <button className={`w-3 h-3 rounded-full border-2 border-gray-600 ${curIndex === imageIndices[index] && "bg-gray-600"} inline-block mx-2 cursor-pointer`}
-                                  onClick={() => {
-                                    setImageIndices(imageIndices.map((val, i) => i === index ? curIndex : val));
-                                  }}
-                                ></button>
-                              )
-                            })
-                          }
+                      {(ev.images?.length > 1) && (
+                        <div className="w-full py-4 flex items-center justify-between lg:justify-center">
+                          <button
+                            className="lg:hidden group w-10 h-10 pl-4"
+                            onClick={() => { scrollLeft('imagesDiv' + index); }}
+                          >
+                            <BsChevronLeft className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                          </button>
+                          <div>
+                            {
+                              ev.images?.map((image, curIndex) => {
+                                const imagePositionIndex = document.getElementById('imagesDiv' + index)?.scrollLeft / document.getElementById('imagesDiv' + index)?.clientWidth;
+                                return (
+                                  <button className={`w-3 h-3 rounded-full border-2 border-gray-600 ${(curIndex - 0.1 <= imagePositionIndex) && (imagePositionIndex < curIndex + 0.9) && "bg-gray-600"} inline-block mx-2 cursor-pointer`}
+                                    onClick={() => {
+                                      document.getElementById('imagesDiv' + index)?.scrollTo({
+                                        left: curIndex * document.getElementById('imagesDiv' + index)?.clientWidth,
+                                        behavior: 'smooth'
+                                      });
+                                    }}
+                                  ></button>
+                                )
+                              })
+                            }
+                          </div>
+                          <button
+                            className="lg:hidden group w-10 h-10 pr-4"
+                            onClick={() => { scrollRight('imagesDiv' + index); }}
+                          >
+                            <BsChevronRight className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                          </button>
                         </div>
-
-                        <button
-                          className="lg:hidden group w-10 h-10 pr-4"
-                          onClick={() => {
-                            if (imageIndices[index] < ev.images.length - 1) {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? val + 1 : val));
-                            } else {
-                              setImageIndices(imageIndices.map((val, i) => i === index ? 0 : val));
-                            }
-                          }}
-                        >
-                          <BsChevronRight className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
-                        </button>
-                      </div>
+                      )}
                     </div>
-                  )}
+                  )
+                }
                 <div className="w-full flex flex-col lg:flex-row p-6 px-12 lg:px-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
                   {ev.registrationLink && (
                     <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
@@ -258,25 +260,7 @@ const Feed = ({ id = "all" }) => {
                 </div>
               </section>
             )
-          })
-          }
-          {
-            ((event.length > 0) && (allEvents.length > currentEvents.length)) && (
-              <button className="bg-gray-200 hover:bg-gray-300 transition-all ease-in-out duration-300 w-fit rounded-lg px-6 py-2 text-center text-sm text-gray-700 hover:text-gray-800 font-semibold"
-                onClick={() => {
-                  if (eventState === "current") {
-                    setEventState("all");
-                    setEvent(allEvents);
-                  } else {
-                    setEventState("current");
-                    setEvent(currentEvents);
-                  }
-                }}
-              >
-                {eventState === "current" ? "View all previous posts" : "View live posts only"}
-              </button>
-            )
-          }
+          })}
         </div>
         : (
           loading ? (
@@ -323,6 +307,25 @@ const Feed = ({ id = "all" }) => {
               </p>
             </section>
           )
+        )
+      }
+      {
+        !loading && (allEvents.length > currentEvents.length) && (
+          <div className='flex lg:justify-end lg:w-full'>
+            <button className="bg-gray-200 hover:bg-gray-300 transition-all ease-in-out duration-300 w-fit rounded-lg px-6 py-2 text-center text-sm text-gray-700 hover:text-gray-800 font-semibold"
+              onClick={() => {
+                if (eventState === "current") {
+                  setEventState("all");
+                  setEvent(allEvents);
+                } else {
+                  setEventState("current");
+                  setEvent(currentEvents);
+                }
+              }}
+            >
+              {eventState === "current" ? "View all previous posts" : "View live posts only"}
+            </button>
+          </div>
         )
       }
     </div>
