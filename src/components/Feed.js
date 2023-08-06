@@ -119,7 +119,7 @@ const Feed = ({ id = "all" }) => {
             const dateTime = new Date(ev.startDate);
 
             return (
-              <section className={`w-full ${index !== 0 && "border-t-2"} border-gray-400 lg:border-2 lg:rounded-lg`}
+              <section className={`w-full ${index !== 0 && "border-t-0"} border-gray-400 lg:border-2 lg:rounded-lg`}
                 id={ev.eventName}
                 key={ev.eventName}
               >
@@ -135,15 +135,16 @@ const Feed = ({ id = "all" }) => {
                     ></button>
                     <button className="" onClick={(e) => { navigate(`/club/${ev.user}`) }}>
                       <div className="flex items-end space-x-1">
-                        <p className="text-lg font-semibold text-left">{ev.eventName}</p>
-                        <p className="text-xs mb-1 pl-2 text-gray-500 text-right">{calculateTimeDiff(ev.publishedAt)}</p>
+                        <p className="lg:text-lg font-semibold text-left">{ev.eventName}</p>
+                        <p className='text-4xl leading-6 pl-1 text-gray-600'>·</p>
+                        <p className="text-xs mb-1 pl-1 text-gray-500 text-right">{calculateTimeDiff(ev.publishedAt)}</p>
                       </div>
-                      <div className="text-base text-gray-500 text-left">
+                      <div className="text-sm lg:text-base text-gray-500 text-left">
                         {clubs.filter((club) => club.clubId === ev.user)[0]?.clubName}
                       </div>
                     </button>
                   </header>
-                  <div className='flex flex-row items-center justify-between lg:justify-around my-6 font-poppins lg:text-lg text-gray-700 font-semibold pt-2 lg:pt-0'>
+                  <div className='flex flex-row items-center justify-between lg:justify-around my-6 font-poppins text-sm lg:text-lg text-gray-700 font-semibold pt-2 lg:pt-0'>
                     <div className="flex items-center space-x-2 lg:space-x-4">
                       <BsCalendar className='text-lg lg:text-2xl' />
                       <p className="">{dateTime.getDate()} {monthNames[dateTime.getMonth()]} {"'" + dateTime.getFullYear().toString().slice(-2)}</p>
@@ -170,7 +171,7 @@ const Feed = ({ id = "all" }) => {
                     <div>
                       <div className="w-full h-auto max-h-[40rem] relative group">
                         <button
-                          className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one`}
+                          className={`hidden ${ev.images.length > 1 && document.getElementById('imagesDiv' + index)?.scrollLeft !== 0 && "lg:block"} bg-gradient-to-r from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pr-12 absolute top-0 z-10 h-full group-one`}
                           onClick={() => { scrollLeft('imagesDiv' + index); }}
                         >
                           <BsChevronLeft className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
@@ -183,7 +184,7 @@ const Feed = ({ id = "all" }) => {
                           })}
                         </div>
                         <button
-                          className={`hidden ${ev.images.length > 1 && "lg:block"} bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one`}
+                          className={`hidden ${ev.images.length > 1 && (document.getElementById('imagesDiv' + index)?.scrollLeft !== document.getElementById('imagesDiv' + index)?.clientWidth * (ev.images.length - 1)) && "lg:block"} bg-gradient-to-l from-gray-600 opacity-0 group-hover:opacity-60 transition-all ease-in-out duration-500 p-2 pl-12 absolute top-0 right-0 z-10 h-full group-one`}
                           onClick={() => { scrollRight('imagesDiv' + index); }}
                         >
                           <BsChevronRight className="font-bold text-white text-3xl group-one-hover:text-4xl transition-all ease-in-out duration-300" />
@@ -196,7 +197,9 @@ const Feed = ({ id = "all" }) => {
                             className="lg:hidden group w-10 h-10 pl-4"
                             onClick={() => { scrollLeft('imagesDiv' + index); }}
                           >
-                            <BsChevronLeft className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                            {document.getElementById('imagesDiv' + index)?.scrollLeft !== 0 && (
+                              <BsChevronLeft className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                            )}
                           </button>
                           <div>
                             {
@@ -219,16 +222,18 @@ const Feed = ({ id = "all" }) => {
                             className="lg:hidden group w-10 h-10 pr-4"
                             onClick={() => { scrollRight('imagesDiv' + index); }}
                           >
-                            <BsChevronRight className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                            {document.getElementById('imagesDiv' + index)?.scrollLeft !== document.getElementById('imagesDiv' + index)?.clientWidth * (ev.images.length - 1) && (
+                              <BsChevronRight className="font-bold text-3xl lg:group-hover:text-4xl transition-all ease-in-out duration-300" />
+                            )}
                           </button>
                         </div>
                       )}
                     </div>
                   )
                 }
-                <div className="w-full flex flex-col lg:flex-row p-6 px-12 lg:px-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
+                <div className="w-full flex flex-col lg:flex-row p-6 px-20 lg:px-6 space-x-0 lg:space-x-4 space-y-2 lg:space-y-0">
                   {ev.registrationLink && (
-                    <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-white font-semibold"
+                    <button className="flex-1 bg-emerald-600 hover:bg-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center lg:text-lg text-white font-semibold"
                       onClick={() => {
                         window.open(ev.registrationLink.startsWith("http") ? ev.registrationLink : "https://" + ev.registrationLink, "_blank");
                       }}
@@ -238,7 +243,7 @@ const Feed = ({ id = "all" }) => {
                     </button>
                   )}
 
-                  <button className="flex-1 border-2 border-emerald-600 hover:border-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center text-lg text-emerald-600 hover:text-emerald-800 font-semibold"
+                  <button className="flex-1 border-2 border-emerald-600 hover:border-emerald-800 transition-all ease-in-out duration-500 w-full rounded-xl px-6 py-2 text-center lg:text-lg text-emerald-600 hover:text-emerald-800 font-semibold"
                     onClick={() => {
                       window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${DateFormat({ date: ev.startDate })}%2F${DateFormat({ date: ev.endDate })}&details=${ev.description}&location=${ev.venue}&text=${ev.eventName} - ${clubs.filter((club) => club.clubId === ev.user)[0]?.clubName}`, "_blank");
                     }}
