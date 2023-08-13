@@ -3,7 +3,7 @@ import Layout from './Layout'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs';
 import { GALLERY_URL } from "../API/config";
 import axios from 'axios';
-import GLightbox from 'glightbox';
+import ImageCover from '../components/ImageCover';
 
 const YearGallery = () => {
   const [yearWise, setYearWise] = useState(null);
@@ -95,37 +95,10 @@ const YearAccordion = ({ yearObj, year }) => {
 
       <div className='lg:hidden flex flex-row h-[calc(25vh)] gap-2 overflow-auto rounded-xl text-xl pt-4' id={'slider' + year}>
         {coverImages.map((img, i) => {
-          return (<ImageCover coverImage={img} title={titles[i]} className={'min-w-fit w-[calc(70vw)]'} imgClassName={'w-[calc(75vw)]'} />)
+          return (<ImageCover coverImage={img} title={titles[i]} className={'min-w-fit w-[calc(70vw)]'} imgClassName={'w-[calc(75vw)]'} allImages={allImages[i]} />)
         })}
       </div>
     </React.Fragment>
-  )
-}
-
-const ImageCover = ({ coverImage, title, className, imgClassName, allImages }) => {
-  const imagesJSON = allImages?.map((img) => {
-    return {
-      'href': img,
-      'type': 'image',
-    }
-  });
-
-  const myGallery = GLightbox({
-    elements: imagesJSON,
-    autoplayVideos: true,
-  });
-
-  return (
-    <button
-      className={`${className} w-full h-full rounded-xl overflow-hidden relative group`}
-      onClick={() => {
-        myGallery.open();
-      }}
-    >
-      <img src={coverImage} alt="img" className={`${imgClassName} w-full h-full object-cover rounded-xl group-hover:scale-105 transition-all ease-in-out`} />
-      <div className='absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black opacity-50 rounded-xl'></div>
-      <p className={`absolute bottom-2 lg:bottom-4 left-4 font-semibold text-gray-200 text-left uppercase z-10`}>{title}</p>
-    </button>
   )
 }
 

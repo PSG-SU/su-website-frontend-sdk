@@ -164,6 +164,10 @@ const OurTeam = () => {
       }
     });
 
+    if (document.getElementById('officeBearers')?.scrollWidth === document.getElementById('officeBearers')?.clientWidth) {
+      setYearsScroll("no-scroll");
+    }
+
   }, [yearWise])
 
   return (
@@ -318,7 +322,7 @@ const OurTeam = () => {
           <div className="flex flex-row justify-between items-center mt-6 gap-4">
             <div className="hidden lg:block w-10 lg:w-20">
               <button
-                className={`${yearsScroll === 'left' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
+                className={`${yearsScroll === 'left' || yearsScroll === 'no-scroll' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
                   const office = document.getElementById('officeBearers');
                   office?.scrollBy({
@@ -345,7 +349,7 @@ const OurTeam = () => {
             </div>
             <div className="hidden lg:flex w-10 lg:w-20 justify-end">
               <button
-                className={`${yearsScroll === 'right' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
+                className={`${yearsScroll === 'right' || yearsScroll === 'no-scroll' ? "hidden" : "block bg-gray-500 lg:hover:bg-gray-700 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
                   const office = document.getElementById('officeBearers');
                   office?.scrollBy({

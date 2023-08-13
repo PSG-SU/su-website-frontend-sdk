@@ -2,11 +2,11 @@ import React from "react";
 import ContactUs from "../components/ContactUs.js";
 import Navbar from "../components/NavBar.js";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, noPadding = false }) => {
   return (
     <div className="w-screen overflow-x-hidden">
       <Navbar />
-      <div className="pt-16 min-h-[calc(100vh-8rem)] lg:px-[calc(100vw/18)] bg-gray-50">
+      <div className={`pt-16 min-h-[calc(100vh-8rem)] ${!noPadding && "lg:px-[calc(100vw/18)]"} bg-gray-50`}>
         {children}
       </div>
       <ContactUs />

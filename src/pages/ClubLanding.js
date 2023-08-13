@@ -2,27 +2,32 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import Layout from "./Layout";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { fetchClubGeneralDetails, fetchClubTeam } from "../API/calls";
+import { fetchClubGeneralDetails, fetchClubPastEvents, fetchClubTeam } from "../API/calls";
 import { useParams } from "react-router-dom";
 import { AiOutlineLink } from "react-icons/ai";
-import { IoLogoInstagram, IoLogoWhatsapp, IoMail, IoLogoLinkedin, IoLogoYoutube, IoLogoFacebook, IoLogoTwitter } from "react-icons/io5";
+import { IoLogoInstagram, IoLogoWhatsapp, IoMail, IoLogoLinkedin, IoLogoYoutube } from "react-icons/io5";
 import { IoMdCall } from "react-icons/io";
 import { Icon } from '@iconify/react';
 import Feed from "../components/Feed";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import ImageCover from "../components/ImageCover";
 
 const ClubLanding = () => {
   const { id } = useParams();
 
-  const [photos, setPhotos] = useState([]);
   const [details, setDetails] = useState(null);
   const [faculty, setFaculty] = useState([]);
   const [team, setTeam] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [aboutHeight, setAboutHeight] = useState(0);
-  const [sticky, setSticky] = useState(false);
   const [teamDivPos, setTeamDivPos] = useState("left")
+  // const [sticky, setSticky] = useState(false);
+
+  const [coverImages, setCoverImages] = useState(null);
+  const [imageTitles, setImageTitles] = useState(null);
+  const [allImages, setAllImages] = useState(null);
+  const [reports, setReports] = useState(null);
 
   useEffect(() => {
     toast.promise(fetchClubGeneralDetails(id), {
@@ -47,26 +52,23 @@ const ClubLanding = () => {
   }, [id]);
 
   useEffect(() => {
-    axios
-      .get("https://picsum.photos/v2/list?page=2&limit=10")
-      .then((res) => {
-        setPhotos(res.data.map((d) => d.download_url));
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    fetchClubPastEvents(id).then((res) => {
+      setCoverImages(res?.data?.map((e) => e?.coverImage));
+      setImageTitles(res?.data?.map((e) => e?.eventName));
+      setAllImages(res?.data?.map((e) => e?.images));
+      setReports(res?.data?.map((e) => e?.report));
+    });
+  }, [id]);
 
-  // useLayoutEffect(() => {
-  //   function updateSize() {
-  //     const height = document.getElementById("about")?.clientHeight;
-  //     setAboutHeight(height);
-  //   }
-  //   window.addEventListener("resize", updateSize);
-  //   updateSize();
-  //   return () => window.removeEventListener("resize", updateSize);
-  // }, []);
+  useLayoutEffect(() => {
+    function updateSize() {
+      const height = document.getElementById("about")?.clientHeight;
+      setAboutHeight(height);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   // useLayoutEffect(() => {
   //   function updateSize() {
@@ -117,23 +119,23 @@ const ClubLanding = () => {
   }, []);
 
   return (
-    <Layout>
-      <div className="w-full">
-        <div
-          className="h-[7.5rem] lg:h-[15rem] w-full"
-          style={
-            details
-              ? {
-                background: `url(${details.general?.banner_url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }
-              : {
-                background: "#797979",
-              }
-          }
-        ></div>
+    <Layout noPadding>
+      <div
+        className="h-[7.5rem] lg:h-[15rem] w-full"
+        style={
+          details
+            ? {
+              background: `url(${details.general?.banner_url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }
+            : {
+              background: "#797979",
+            }
+        }
+      ></div>
+      <div className="w-full lg:px-[calc(100vw/24)]">
         <div className="flex flex-col lg:flex-row items-center gap-6 -mt-12 lg:-mt-36">
           <img
             className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full bg-gray-100 border-4 lg:border-8 border-gray-200 lg:ml-16 object-contain"
@@ -166,7 +168,7 @@ const ClubLanding = () => {
 
         <div className="flex flex-col lg:flex-row w-full items-center lg:items-start gap-8 my-8">
           {details ? (
-            <div className={`flex flex-col gap-8 w-full lg:w-1/4`} id='about'>
+            <div className={`flex flex-col gap-8 w-full ${coverImages?.length > 0 ? "lg:w-1/4" : "lg:w-[30%]"}`} id='about'>
               <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
                 <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
                 <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
@@ -208,7 +210,7 @@ const ClubLanding = () => {
             </div>
           )}
 
-          <div className={`flex flex-col gap-8 w-full lg:w-1/2 items-center lg:overflow-auto`} id='feed'
+          <div className={`flex flex-col gap-8 w-full ${coverImages?.length > 0 ? "lg:w-1/2" : "lg:w-[65%]"} items-center lg:overflow-auto`} id='feed'
           // style={{ maxHeight: aboutHeight, minHeight: "800px" }}
           >
             <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-2 border-t-4 border-t-gray-400">Posts</div>
@@ -217,24 +219,33 @@ const ClubLanding = () => {
             {/* </div> */}
           </div>
 
-          <div className="flex flex-col gap-8 w-full lg:w-1/4 items-center lg:items-start">
-            <p className="lg:hidden text-xl text-gray-700 font-bold pt-2 -mb-4 border-t-4 border-t-gray-400">Photos</p>
-            <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 w-full">
-              <p className="hidden lg:block text-xl text-gray-700 font-bold">Photos</p>
-              <div className="grid grid-cols-3 gap-1 mt-6">
-                {photos.map((p, idx) => (
-                  <div
-                    style={{
-                      background: `url(${p})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                    className="aspect-square"
-                  />
-                ))}
-              </div>
-            </section>
+          <div className={`flex flex-col gap-8 w-full ${coverImages?.length > 0 ? "lg:w-1/4" : "lg:w-fit"} items-center lg:items-start`}>
+            {coverImages?.length > 0 && (
+              <React.Fragment>
+                <p className="lg:hidden text-xl text-gray-700 font-bold pt-2 -mb-4 border-t-4 border-t-gray-400">Past Events</p>
+                <section
+                  className="lg:bg-gray-200 lg:rounded-lg lg:p-8 w-full overflow-auto"
+                  style={{ maxHeight: aboutHeight }}
+                >
+                  <p className="hidden lg:block text-xl text-gray-700 font-bold">Past Events</p>
+                  <div className='flex flex-row lg:flex-col gap-4 text-xl overflow-auto no-scrollbar px-6 lg:px-0 lg:pt-4'>
+                    {coverImages?.map((img, i) => {
+                      return (
+                        <ImageCover
+                          coverImage={img}
+                          title={imageTitles && imageTitles[i]}
+                          allImages={allImages && allImages[i]}
+                          report={reports && reports[i]}
+                          className={'min-w-fit lg:h-[calc(12.5vh)]'}
+                          imgClassName={'w-[calc(75vw)]'}
+                          club
+                        />
+                      )
+                    })}
+                  </div>
+                </section>
+              </React.Fragment>
+            )}
 
             <div className="lg:hidden w-full pt-4">
               <Contact generalDetails={details} />
@@ -244,7 +255,7 @@ const ClubLanding = () => {
       </div>
 
       {(faculty.length > 0 || team.length > 0) && (
-        <div className="w-full flex flex-col items-center pt-6 lg:pt-0">
+        <div className="w-full flex flex-col items-center pt-6 lg:pt-0 lg:px-[calc(100vw/24)]">
           <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-8 w-fit border-t-4 border-t-gray-400">Our Team</div>
           <section className="lg:bg-gray-200 rounded-xl py-8 w-full">
             <p className="hidden lg:block text-xl text-gray-700 font-bold text-center">Our Team</p>
@@ -256,7 +267,7 @@ const ClubLanding = () => {
                   const teamDiv = document.getElementById("team");
                   if (teamDiv) {
                     teamDiv.scrollBy({
-                      left: -200,
+                      left: -teamDiv.clientWidth / 2,
                       behavior: 'smooth'
                     });
                   }
@@ -295,7 +306,7 @@ const ClubLanding = () => {
                   const teamDiv = document.getElementById("team");
                   if (teamDiv) {
                     teamDiv.scrollBy({
-                      left: 200,
+                      left: teamDiv.clientWidth / 2,
                       behavior: 'smooth'
                     });
                   }
@@ -338,7 +349,7 @@ const Contact = ({ generalDetails }) => {
               />
             )}
 
-            {(content?.instagram || content?.linkedin || content?.linktree || content?.youtube || content?.facebook || content?.twitter || content?.discord) && (
+            {(content?.instagram || content?.linkedin || content?.linktree || content?.youtube || content?.discord) && (
               <p className="text-xl font-bold text-gray-700 pt-4">
                 Socials
               </p>
@@ -360,14 +371,6 @@ const Contact = ({ generalDetails }) => {
               {content?.youtube && (<Social
                 link={content?.youtube.startsWith("http") ? content?.youtube : "https://" + content?.youtube}
                 icon={<IoLogoYoutube />}
-              />)}
-              {content?.facebook && (<Social
-                link={content?.facebook.startsWith("http") ? content?.facebook : "https://" + content?.facebook}
-                icon={<IoLogoFacebook />}
-              />)}
-              {content?.twitter && (<Social
-                link={content?.twitter.startsWith("http") ? content?.twitter : "https://" + content?.twitter}
-                icon={<IoLogoTwitter />}
               />)}
               {content?.discord && (<Social
                 link={content?.discord.startsWith("http") ? content?.discord : "https://" + content?.discord}
