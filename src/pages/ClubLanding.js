@@ -53,10 +53,11 @@ const ClubLanding = () => {
 
   useEffect(() => {
     fetchClubPastEvents(id).then((res) => {
-      setCoverImages(res?.data?.map((e) => e?.coverImage));
-      setImageTitles(res?.data?.map((e) => e?.eventName));
-      setAllImages(res?.data?.map((e) => e?.images));
-      setReports(res?.data?.map((e) => e?.report));
+      const sortedData = res?.data?.reverse();
+      setCoverImages(sortedData?.map((e) => e?.coverImage));
+      setImageTitles(sortedData?.map((e) => e?.eventName));
+      setAllImages(sortedData?.map((e) => e?.images));
+      setReports(sortedData?.map((e) => e?.report));
     });
   }, [id]);
 
@@ -224,7 +225,7 @@ const ClubLanding = () => {
               <React.Fragment>
                 <p className="lg:hidden text-xl text-gray-700 font-bold pt-2 -mb-4 border-t-4 border-t-gray-400">Past Events</p>
                 <section
-                  className="lg:bg-gray-200 lg:rounded-lg lg:p-8 w-full overflow-auto"
+                  className="lgbg-gray-200 lgrounded-lg lgp-8 w-full overflow-auto"
                   style={{ maxHeight: aboutHeight }}
                 >
                   <p className="hidden lg:block text-xl text-gray-700 font-bold">Past Events</p>
@@ -236,7 +237,7 @@ const ClubLanding = () => {
                           title={imageTitles && imageTitles[i]}
                           allImages={allImages && allImages[i]}
                           report={reports && reports[i]}
-                          className={'min-w-fit lg:h-[calc(12.5vh)]'}
+                          className={'min-w-fit lg:h-[calc(15vh)]'}
                           imgClassName={'w-[calc(75vw)]'}
                           club
                         />
