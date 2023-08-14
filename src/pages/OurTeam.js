@@ -4,10 +4,9 @@ import Layout from "./Layout";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = false }) => {
-  // console.log(image);
   return (
-    <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
-      {role1.length > 0 && (
+    <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center lg:w-1/2`}>
+      {role1?.length > 0 && (
         <div className={`lg:h-12 mt-12 lg:mt-8 mb-4 uppercase tracking-widest text-xl ${nowrap && "whitespace-nowrap"}`}>
           {role1}
         </div>
@@ -189,6 +188,8 @@ const OurTeam = () => {
             image={patron.image_url}
             role2={patron.position}
           />
+        </div>
+        <div className="flex-auto lg:flex flex-row mt-12 w-full">
           <Person
             name={deanStudent.name}
             role1={deanStudent.role}
