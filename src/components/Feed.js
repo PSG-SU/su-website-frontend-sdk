@@ -21,6 +21,18 @@ const Feed = ({ id = "all" }) => {
   const [nextCircle, setNextCircle] = useState(0);
 
   useEffect(() => {
+    if (window.location.hash !== "") {
+      const e = window.location.hash.split("#")[1];
+      setTimeout(() => {
+        const element = document.getElementById(e);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: 'center' });
+        }
+      }, 500);
+    }
+  }, []);
+
+  useEffect(() => {
     axios
       .get(`${FEED_URL}`)
       .then((res) => {
@@ -120,8 +132,8 @@ const Feed = ({ id = "all" }) => {
 
             return (
               <section className={`w-full ${index !== 0 && "border-t-0"} border-gray-400 lg:border-2 lg:rounded-lg`}
-                id={ev.eventName}
-                key={ev.eventName}
+                id={ev.eventName.split(" ").join("-")}
+                key={ev.eventName.split(" ").join("-")}
               >
                 <div className="p-6 border-b-gray-400 lg:border-b-2">
                   <header className="flex items-center space-x-4">
@@ -255,7 +267,7 @@ const Feed = ({ id = "all" }) => {
                   <button
                     className="hidden lg:block text-gray-600 hover:text-gray-700"
                     onClick={() => {
-                      navigator.clipboard.writeText(window.location.href + "#" + ev.eventName);
+                      navigator.clipboard.writeText(window.location.origin + window.location.pathname + "#" + ev.eventName.split(" ").join("-"));
                       toast.success("Link copied to clipboard!");
                     }}
                   >

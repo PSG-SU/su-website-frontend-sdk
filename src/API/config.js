@@ -1,6 +1,8 @@
 export const API_URL = "http://localhost:3002/api";
 // export const API_URL = "https://sucmsdb.psgtech.ac.in/api";
 
+export const PROPOSAL_URL = `${API_URL}/club/proposal`;
+
 export const FEED_URL = `${API_URL}/club/proposal/feed`;
 
 export const GALLERY_URL = `${API_URL}/gallery`;

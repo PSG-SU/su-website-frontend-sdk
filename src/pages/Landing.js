@@ -3,9 +3,9 @@ import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 import { MdOutlineGraphicEq } from "react-icons/md";
 import { FiSun } from "react-icons/fi";
 import { BsTrophy } from "react-icons/bs";
-import { BiLink } from "react-icons/bi";
 import ContactUs from "../components/ContactUs.js";
-import { ANNOUNCEMENT_URL, ABOUT_URL, CLUB_URL } from "../API/config";
+import Announcements from "../components/Announcements.js";
+import { ABOUT_URL, CLUB_URL } from "../API/config";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -40,7 +40,7 @@ const Landing = () => {
       <div className="flex flex-col-reverse lg:flex-row justify-start items-stretch w-full">
         <div className="w-full lg:w-3/4">
           <AboutUs />
-          <div className="lg:grid lg:grid-rows-1 lg:grid-cols-3 lg:items-stretch">
+          <div className="lg:grid lg:grid-rows-1 lg:grid-cols-3 lg:items-stretch text-justify">
             <IconBackgroundSection
               title="Our Mission"
               icon={<MdOutlineGraphicEq />}
@@ -147,7 +147,7 @@ const AboutUs = () => {
             backgroundSize: "cover",
           }}
         />
-        <p className="font-sans text-sm mt-8 tracking-wide text-justify lg:text-left">
+        <p className="font-sans text-sm mt-8 tracking-wide text-justify">
           {aboutUsContent}
         </p>
       </div>
@@ -190,7 +190,7 @@ const AboutCollege = () => {
             backgroundSize: "cover",
           }}
         />
-        <p className="font-sans text-sm mt-8 tracking-wide text-justify lg:text-left">
+        <p className="font-sans text-sm mt-8 tracking-wide text-justify">
           {aboutCollege}
         </p>
       </div>
@@ -243,84 +243,5 @@ const StatSection = ({ stats }) => {
     </div>
   );
 };
-
-const Announcements = () => {
-  const [announcements, setAnnouncements] = useState([]);
-  const [expanded, setExpanded] = useState([]);
-
-  const sendrequest = async () => {
-    const res = await axios.get(`${ANNOUNCEMENT_URL}`).catch((err) => console.log(err));
-    const data = await res.data;
-    return data;
-  }
-
-  useEffect(() => {
-    sendrequest().then((data) => setAnnouncements(data));
-  }, []);
-
-  useEffect(() => {
-    setExpanded(announcements.map(() => false));
-  }, [announcements]);
-
-  return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex flex-col items-center mb-4">
-        <h1 className="text-2xl font-serif text-white">Announcements</h1>
-        <div className="w-[70%] h-[1px] mt-1 bg-white"></div>
-      </div>
-      <div className="flex flex-col space-y-4 w-full py-4 h-[650px] overflow-y-auto">
-        {announcements.map((announcement, index) => (
-          <div className="px-8">
-            <p className="text-sm text-gray-300 italic">{announcement.type}</p>
-            <div className="flex w-full justify-between">
-              <h1 className=" text-white font-bold font-sans w-2/3">
-                {announcement.title}
-              </h1>
-              <p className="text-xs text-gray-300 text-right whitespace-nowrap">
-                {announcement.date}
-              </p>
-            </div>
-            <div className="flex w-full mt-1 justify-between items-center border-b-2 border-[#464495] pb-3">
-              <div className="">
-                <p
-                  id={`${index}-body`}
-                  className={`text-xs text-gray-100 text-ellipsis ${!expanded[index] && "max-h-8 [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box]"} overflow-hidden`}>
-                  {announcement.body}
-                </p>
-                {
-                  (!expanded[index]) &&
-                  (document.getElementById(`${index}-body`)?.scrollHeight > document.getElementById(`${index}-body`)?.clientHeight) &&
-                  (
-                    <button className="text-xs text-gray-100 font-semibold hover:underline"
-                      onClick={() => {
-                        setExpanded((prev) => {
-                          const newExpanded = [...prev];
-                          newExpanded[index] = !newExpanded[index];
-                          return newExpanded;
-                        });
-                      }}
-                    >
-                      Read More
-                    </button>
-                  )}
-              </div>
-              {announcement.link ? (
-                <a href={announcement.link.startsWith("http") ? announcement.link : "https://" + announcement.link} target="_blank" rel="noopener noreferrer" >
-                  <BiLink
-                    size={24}
-                    className="ml-4 text-white hover:text-gray-400"
-                  />
-                </a>
-              ) : (
-                <div className="pl-8" />
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 
 export default Landing;
