@@ -149,7 +149,7 @@ const OurTeam = () => {
       office.scrollLeft = office.scrollWidth;
     }
 
-    office.addEventListener('scroll', () => {
+    office?.addEventListener('scroll', () => {
       const scrollLeft = office?.scrollLeft;
       const scrollWidth = office?.scrollWidth;
       const clientWidth = office?.clientWidth;

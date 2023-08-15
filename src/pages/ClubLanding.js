@@ -1,6 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import Layout from "./Layout";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import { fetchClubGeneralDetails, fetchClubPastEvents, fetchClubTeam } from "../API/calls";
 import { useParams } from "react-router-dom";
@@ -110,6 +109,12 @@ const ClubLanding = () => {
           setTeamDivPos("middle");
         }
       });
+
+      setTimeout(() => {
+        if (document.getElementById('team')?.scrollWidth === document.getElementById('team')?.clientWidth) {
+          setTeamDivPos("no-scroll");
+        }
+      }, 500);
     }
   }, [team, faculty]);
 
@@ -260,9 +265,21 @@ const ClubLanding = () => {
           <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-8 w-fit border-t-4 border-t-gray-400">Our Team</div>
           <section className="lg:bg-gray-200 rounded-xl py-8 w-full">
             <p className="hidden lg:block text-xl text-gray-700 font-bold text-center">Our Team</p>
+
+            <div className="flex flex-col lg:flex-row overflow-auto lg:gap-8 lg:px-4 no-scrollbar justify-center">
+              {faculty.length > 0 && faculty.slice(0).reverse().map((f) => (
+                <Person
+                  name={f.name}
+                  role1={f.position}
+                  image={f.image_url}
+                  role2={f.department}
+                  year={f.designation}
+                />
+              ))}
+            </div>
             <div className="flex flex-row gap-6 items-center justify-center relative" id="teamBig">
               <button
-                className={`${(teamDivPos === "left") ?
+                className={`${(teamDivPos === "left" || teamDivPos === "no-scroll") ?
                   "hidden" : "hidden lg:block absolute -left-5 bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg"}`}
                 onClick={() => {
                   const teamDiv = document.getElementById("team");
@@ -278,15 +295,6 @@ const ClubLanding = () => {
               </button>
 
               <div className="flex flex-row overflow-auto gap-2 lg:px-4 no-scrollbar" id='team'>
-                {faculty.length > 0 && faculty.slice(0).reverse().map((f) => (
-                  <Person
-                    name={f.name}
-                    role1={f.position}
-                    image={f.image_url}
-                    role2={f.department}
-                    year={f.designation}
-                  />
-                ))}
                 {team.length > 0 && team.slice(0).reverse().map((t) => (
                   <Person
                     name={t.name}
@@ -301,7 +309,7 @@ const ClubLanding = () => {
               </div>
 
               <button
-                className={`${(teamDivPos === "right" || document.getElementById('team')?.clientWidth < document.getElementById('teamBig')?.clientWidth) ?
+                className={`${(teamDivPos === "right" || teamDivPos === "no-scroll" || document.getElementById('team')?.clientWidth < document.getElementById('teamBig')?.clientWidth) ?
                   "hidden" : "hidden lg:block absolute -right-5 bg-gray-400 lg:hover:bg-gray-500 transition-all ease-in-out rounded-full p-0.5 shadow-lg h-fit"}`}
                 onClick={() => {
                   const teamDiv = document.getElementById("team");
@@ -351,7 +359,7 @@ const Contact = ({ generalDetails }) => {
             )}
 
             {(content?.instagram || content?.linkedin || content?.linktree || content?.youtube || content?.discord) && (
-              <p className="text-xl font-bold text-gray-700 pt-4">
+              <p className="text-lg font-bold text-gray-700 pt-4">
                 Socials
               </p>
             )}
@@ -440,9 +448,9 @@ const Social = ({ link, icon }) => {
 
 const Person = ({ name, role1 = "", image, role2 = "", nowrap = false, ob = false, year = "", from = "", to = "" }) => {
   return (
-    <div className={`flex-auto md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
+    <div className={`md:flex flex-col ${ob && "w-full lg:w-44"} px-8 items-center text-center`}>
       {role1.length > 0 && (
-        <div className={`mt-12 lg:mt-8 mb-4 uppercase tracking-widest h-14 text-xl ${nowrap && "whitespace-nowrap"}`}>
+        <div className={`h-12 mt-12 lg:mt-8 mb-4 uppercase tracking-widest text-xl ${nowrap && "whitespace-nowrap"}`}>
           {role1}
         </div>
       )}
