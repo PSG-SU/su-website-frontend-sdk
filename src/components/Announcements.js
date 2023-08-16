@@ -51,7 +51,9 @@ const Announcements = ({ feed = false }) => {
                 <p
                   id={`${index}-body`}
                   className={`text-xs ${bodyText} text-ellipsis ${!expanded[index] && "max-h-8 [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [display:-webkit-box]"} overflow-hidden`}>
-                  {announcement.body}
+                  {announcement.body.split("\n").map((line) => (
+                    <span>{line}<br /></span>
+                  ))}
                 </p>
                 {
                   (!expanded[index]) &&

@@ -176,7 +176,9 @@ const Feed = ({ id = "all" }) => {
                       <p className="">{ev.venue}</p>
                     </div>
                   </div>
-                  <p className="mt-4">{ev.description}</p>
+                  <p className="mt-4">{ev.description.split("\n").map((line) => (
+                    <span>{line}<br /></span>
+                  ))}</p>
                 </div>
                 {
                   ev.images && ev.images.length > 0 && (

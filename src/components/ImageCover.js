@@ -3,11 +3,13 @@ import GLightbox from 'glightbox';
 
 const ImageCover = ({ coverImage, title, report, className, imgClassName, allImages, club = false }) => {
   const imagesJSON = allImages?.map((img) => {
+    const formattedReport = report?.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    
     return club ? {
       'href': img,
       'type': 'image',
       'title': title,
-      'description': report,
+      'description': formattedReport,
       'descPosition': 'right',
     } : {
       'href': img,

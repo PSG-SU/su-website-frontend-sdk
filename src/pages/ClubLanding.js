@@ -141,7 +141,7 @@ const ClubLanding = () => {
             }
         }
       ></div>
-      <div className="w-full lg:px-[calc(100vw/24)]">
+      <div className="w-full lg:px-[calc(100vw/28)]">
         <div className="flex flex-col lg:flex-row items-center gap-6 -mt-12 lg:-mt-36">
           <img
             className="w-32 h-32 lg:w-64 lg:h-64 aspect-square rounded-full bg-gray-100 border-4 lg:border-8 border-gray-200 lg:ml-16 object-contain"
@@ -178,7 +178,9 @@ const ClubLanding = () => {
               <section className="lg:bg-gray-200 rounded-lg lg:p-8 px-6 flex flex-col items-center lg:items-start">
                 <div className="text-gray-700 text-xl font-bold border-t-4 border-t-gray-400 lg:border-0 pt-2 lg:pt-0">About Us</div>
                 <p className="text-base text-gray-500 mt-6 text-justify lg:text-left">
-                  {details?.general?.description ||
+                  {details?.general?.description?.split("\n").map((line) => (
+                    <span>{line}<br /></span>
+                  )) ||
                     "No description provided"}
                 </p>
                 {
@@ -261,7 +263,7 @@ const ClubLanding = () => {
       </div>
 
       {(faculty.length > 0 || team.length > 0) && (
-        <div className="w-full flex flex-col items-center pt-6 lg:pt-0 lg:px-[calc(100vw/24)]">
+        <div className="w-full flex flex-col items-center pt-6 lg:pt-0 lg:px-[calc(100vw/28)]">
           <div className="lg:hidden text-gray-700 text-xl font-bold pt-2 -mb-8 w-fit border-t-4 border-t-gray-400">Our Team</div>
           <section className="lg:bg-gray-200 rounded-xl py-8 w-full">
             <p className="hidden lg:block text-xl text-gray-700 font-bold text-center">Our Team</p>
