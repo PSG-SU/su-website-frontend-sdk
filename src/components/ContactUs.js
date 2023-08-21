@@ -5,6 +5,7 @@ import { BsInstagram, BsLinkedin } from "react-icons/bs";
 import { SiGmail } from "react-icons/si";
 import { MdPhone } from "react-icons/md";
 import { Icon } from '@iconify/react';
+import { Link } from "react-router-dom";
 
 // Contact Us
 
@@ -13,7 +14,7 @@ const ContactUs = ({ homePage = false }) => {
     <React.Fragment>
       <section
         id="section9"
-        className={`w-screen bg-black px-[calc(100vw/16)] pt-16 pb-8 font-poppins ${!homePage && "mt-8"}`}
+        className={`w-screen bg-black px-[calc(100vw/22)] pt-16 pb-8 font-poppins ${!homePage && "mt-8"}`}
       >
         <h1 className="text-[2.75rem] text-white font-semibold pb-6 text-center lg:text-left">Contact Us</h1>
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 text-white mt-4">
@@ -86,6 +87,20 @@ const ContactUs = ({ homePage = false }) => {
 
           <div className="w-full lg:w-[30%]">
             <PSGMap />
+          </div>
+        </div>
+
+        <div className="mt-16 py-2 w-full text-center lg:text-left ">
+          <h1 className="font-semibold text-white text-xl">Developed By</h1>
+          <div className="flex flex-col lg:flex-row mt-6 text-white w-full gap-6 lg:gap-8">
+            <div className="space-y-2 lg:w-[30%]">
+              <p className="text-lg">Jeyam Palaniappan</p>
+              <a className="hover:text-gray-400 text-sm" href="https://github.com/jeyam03/" target="_blank" rel="noreferrer">https://github.com/jeyam03/</a>
+            </div>
+            <div className="space-y-2 lg:w-[30%]">
+              <p className="text-lg">T G Ashwin Kumar</p>
+              <a className="hover:text-gray-400 text-sm" href="https://github.com/tgashwinkumar/" target="_blank" rel="noreferrer">https://github.com/tgashwinkumar/</a>
+            </div>
           </div>
         </div>
 
