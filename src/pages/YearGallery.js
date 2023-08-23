@@ -27,7 +27,7 @@ const YearGallery = () => {
 
   return (
     <Layout>
-      <div className="p-8 px-6 pt-0 w-full">
+      <div className="p-8 px-0 lg:px-6 pt-0 w-full">
         <h1 className="text-4xl uppercase text-center mt-16 w-full">
           Our <span className="font-bold">Gallery</span>
         </h1>
@@ -47,7 +47,7 @@ const YearGallery = () => {
 
 const YearTitle = ({ className, title }) => {
   return (
-    <div className={`${className} w-fit`}>
+    <div className={`${className} w-fit px-6 lg:px-0`}>
       <p className='text-3xl lg:text-6xl font-semibold mt-16'>{title}</p>
       <div className='w-[75%] h-1 rounded-full bg-black mt-1 lg:mt-2'></div>
     </div>
@@ -93,7 +93,7 @@ const YearAccordion = ({ yearObj, year }) => {
         }
       </div>
 
-      <div className='lg:hidden flex flex-row h-[calc(25vh)] gap-2 overflow-auto rounded-xl text-xl pt-4' id={'slider' + year}>
+      <div className='lg:hidden flex flex-row h-[calc(25vh)] gap-2 overflow-auto text-xl pt-4 px-6 no-scrollbar' id={'slider' + year}>
         {coverImages.map((img, i) => {
           return (<ImageCover coverImage={img} title={titles[i]} className={'min-w-fit w-[calc(70vw)]'} imgClassName={'w-[calc(75vw)]'} allImages={allImages[i]} />)
         })}

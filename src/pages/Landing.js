@@ -137,7 +137,7 @@ const AboutUs = () => {
           About Us
         </h2>
         <h1 className="text-5xl font-bold uppercase font-sans tracking-wider">
-          Student's Union
+          Students Union
         </h1>
         <div
           className="w-full my-4 h-[200px] lg:hidden"

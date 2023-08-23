@@ -245,7 +245,7 @@ const ClubLanding = () => {
                           allImages={allImages && allImages[i]}
                           report={reports && reports[i]}
                           className={'min-w-fit lg:h-[calc(15vh)]'}
-                          imgClassName={'w-[calc(75vw)]'}
+                          imgClassName={'lg:w-[calc(75vw)]'}
                           club
                         />
                       )
