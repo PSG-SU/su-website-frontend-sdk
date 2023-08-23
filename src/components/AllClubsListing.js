@@ -44,15 +44,15 @@ const ClubLoading = () => {
         <div className="bg-gray-500 h-6 w-3/4 ml-4 mt-8 rounded-md" id="skeleton"></div>
       </div>
 
-      <div className="lg:hidden w-full rounded-2xl overflow-hidden flex flex-row"
-        id="skeleton-grid"
+      <div className="lg:hidden w-full rounded-2xl overflow-hidden flex flex-row animate-pulse bg-gray-200"
+        // id="skeleton-grid"
       >
         <div className="w-1/3 p-4">
-          <div className="bg-gray-500 w-full h-full rounded-lg" id="skeleton"></div>
+          <div className="bg-gray-300 w-full h-full rounded-lg" id="skeleto"></div>
         </div>
         <div className="w-2/3 p-4 flex flex-col">
-          <div className="bg-gray-500 h-10 w-3/4 ml-2 rounded-lg" id="skeleton"></div>
-          <div className="bg-gray-500 h-6 w-1/2 ml-2 mt-2 rounded-md" id="skeleton"></div>
+          <div className="bg-gray-300 h-10 w-3/4 ml-2 rounded-lg" id="skeleto"></div>
+          <div className="bg-gray-300 h-6 w-1/2 ml-2 mt-2 rounded-md" id="skeleto"></div>
         </div>
       </div>
     </React.Fragment>

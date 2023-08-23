@@ -26,10 +26,10 @@ const Navbar = ({ canScrollAdjust = false }) => {
   return (
     <nav className="fixed z-50 h-auto w-full">
       <div
-        className={`flex justify-between items-center  w-full ${onTop
+        className={`flex justify-between items-center w-full ${onTop
           ? "p-4 lg:p-8 bg-gradient-to-b from-[rgba(0,0,0,0.7)] to-[rgba(0,0,0,0.5)]"
           : "p-3 lg:p-4 bg-gradient-to-b from-[rgba(0,0,0,1)] to-[rgba(0,0,0,1)]"
-          } transition-all ${navOpen && "bg-black bg-opacity-90"}`}
+          } transition-all ${navOpen && "bg-black"}`}
       >
         <button className="flex items-center space-x-4"
           onClick={(e) => { navigate(`/`) }}
@@ -78,18 +78,20 @@ const Navbar = ({ canScrollAdjust = false }) => {
         </div>
       </div>
 
-      {navOpen && (
-        <div className={`w-screen h-screen bg-black bg-opacity-90 flex flex-col justify-center items-center space-y-4`}>
-          <NavItem text="SU By Law" to="/by-law" />
-          <NavItem text="Clubs" to="/clubs" />
-          <NavItem text="Associations" to="/associations" />
-          <NavItem text="Schemes & Wings" to="/schemes-and-wings" />
-          <NavItem text="SU Feed" to="/feed" />
-          <NavItem text="Gallery" to="/gallery" />
-          <NavItem text="Our Team" to="/team" />
-          <NavItem text="Contact Us" to="/#contact-us" />
-        </div>
-      )}
+      <div className={`transition-opacity duration-500 ease-in-out transform ${navOpen ? 'opacity-100' : 'opacity-0'}`}>
+        {navOpen && (
+          <div className={`w-screen h-screen bg-black flex flex-col pl-12 py-8 space-y-4`}>
+            <NavItem text="SU By Law" to="/by-law" />
+            <NavItem text="Clubs" to="/clubs" />
+            <NavItem text="Associations" to="/associations" />
+            <NavItem text="Schemes & Wings" to="/schemes-and-wings" />
+            <NavItem text="SU Feed" to="/feed" />
+            <NavItem text="Gallery" to="/gallery" />
+            <NavItem text="Our Team" to="/team" />
+            <NavItem text="Contact Us" to="/#contact-us" />
+          </div>
+        )}
+      </div>
     </nav>
   );
 };
@@ -98,7 +100,7 @@ const NavItem = ({ text, to = "/" }) => {
   const [isHover, setIsHover] = useState(false);
 
   return (
-    <div className="font-sans uppercase">
+    <div className="font-poppins lg:font-sans lg:uppercase">
       <HashLink
         smooth
         scroll={(el) => el.scrollIntoView({ behavior: "smooth" })}
@@ -107,7 +109,7 @@ const NavItem = ({ text, to = "/" }) => {
         onMouseEnter={(e) => setIsHover(true)}
         onMouseLeave={(e) => setIsHover(false)}
       >
-        <p className="">{text}</p>
+        <p className="text-xl lg:text-base">{text}</p>
         <div className="mt-1 h-[1px] flex justify-center items-center">
           <div
             className={`h-full ${isHover ? "w-[70%]" : "w-0"
