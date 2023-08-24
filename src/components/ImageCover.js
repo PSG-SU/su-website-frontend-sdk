@@ -1,18 +1,20 @@
 import React from 'react'
 import GLightbox from 'glightbox';
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const ImageCover = ({ coverImage, title, report, className, imgClassName, allImages, club = false }) => {
   const imagesJSON = allImages?.map((img) => {
     const formattedReport = report?.replace(/(?:\r\n|\r|\n)/g, '<br>');
     
     return club ? {
-      'href': img,
+      'src': img,
       'type': 'image',
       'title': title,
-      'description': formattedReport,
+      'caption': title.toUpperCase() + ": " + formattedReport,
       'descPosition': 'right',
     } : {
-      'href': img,
+      'src': img,
       'type': 'image',
     }
   });
@@ -26,7 +28,11 @@ const ImageCover = ({ coverImage, title, report, className, imgClassName, allIma
     <button
       className={`${className} w-full h-full rounded-xl overflow-hidden relative group`}
       onClick={() => {
-        myGallery.open();
+        // myGallery.open();
+        new Fancybox(imagesJSON, {
+          wheel: false,
+          commonCaption: true,
+        }).open();
       }}
     >
       <img src={coverImage} alt="img" className={`${imgClassName} w-full h-full object-cover rounded-xl group-hover:scale-105 transition-all ease-in-out`} />
