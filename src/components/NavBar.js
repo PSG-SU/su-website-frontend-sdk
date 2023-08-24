@@ -88,7 +88,7 @@ const Navbar = ({ canScrollAdjust = false }) => {
             <NavItem text="SU Feed" to="/feed" />
             <NavItem text="Gallery" to="/gallery" />
             <NavItem text="Our Team" to="/team" />
-            <NavItem text="Contact Us" to="/#contact-us" />
+            <NavItem text="Contact Us" to="/#contact-us" navState={[navOpen, setNavOpen]} />
           </div>
         )}
       </div>
@@ -96,16 +96,31 @@ const Navbar = ({ canScrollAdjust = false }) => {
   );
 };
 
-const NavItem = ({ text, to = "/" }) => {
+const NavItem = ({ text, to = "/", navState }) => {
   const [isHover, setIsHover] = useState(false);
+  const [navOpen, setNavOpen] = navState || [false, () => { }];
+  const navigate = useNavigate();
 
   return (
-    <div className="font-poppins lg:font-sans lg:uppercase">
-      <HashLink
-        smooth
-        scroll={(el) => el.scrollIntoView({ behavior: "smooth" })}
-        to={to}
-        className="text-white"
+    <div className="">
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          if (to[1] === "#") {
+            navigate("/");
+            setTimeout(() => {
+              const element = document.getElementById(to.slice(2));
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 100);
+            if (navOpen) { setNavOpen(false); }
+            return;
+          }
+          window.scrollTo(0, 0);
+          navigate(to);
+        }}
+        className="text-white font-poppins lg:font-sans lg:uppercase"
         onMouseEnter={(e) => setIsHover(true)}
         onMouseLeave={(e) => setIsHover(false)}
       >
@@ -116,7 +131,7 @@ const NavItem = ({ text, to = "/" }) => {
               } transition-all bg-white origin-center`}
           ></div>
         </div>
-      </HashLink>
+      </button>
     </div>
   );
 };
